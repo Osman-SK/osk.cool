@@ -1,0 +1,12 @@
+runtime: nodejs22   # or python39 / php83 – any static-friendly runtime
+env: standard
+
+handlers:
+- url: /
+  static_files: dist/index.html
+  upload: dist/index.html
+
+- url: /(.*)
+  static_files: dist/\1
+  upload: dist/.*
+  secure: always
