@@ -28,7 +28,7 @@ Live at: https://osk.cool/
 # Install dependencies
 npm install
 
-# Start dev server<a href="http://localhost:5173" target="_blank" rel="noopener noreferrer nofollow"></a>
+# Start dev server @ "http://localhost:5173"
 npm run dev
 
 # Build for production (creates /dist folder)
