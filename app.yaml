@@ -2,11 +2,21 @@ runtime: nodejs22   # or python39 / php83 – any static-friendly runtime
 env: standard
 
 handlers:
+
+  # 1. Root URL (/)
 - url: /
   static_files: dist/index.html
   upload: dist/index.html
+  secure: always
 
-- url: /(.*)
-  static_files: dist/\1
-  upload: dist/.*
+  # 2. Assets (css, js, images, etc.) – serve directly
+- url: /assets/(.*)
+  static_files: dist/assets/\1
+  upload: dist/assets/.*
+  secure: always
+
+  # 3. Catch-all for clean URLs (everything else → add .html)
+- url: /(.*)$
+  static_files: dist/\1.html
+  upload: dist/.*\.html$
   secure: always
