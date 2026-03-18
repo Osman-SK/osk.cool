@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Posts - Osman Sarper Kucuk</title>
-  <link rel="stylesheet" href="/src/style.css" />
+  <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <header>
@@ -19,21 +19,45 @@
   <hr />
 
   <main>
-
-        <p>Coming...</p>
-        <!-- 
-        <p>
-            <a href="/posts/first-post.html" class="x-link">My First Thoughts on Onchain Analytics </a>
-            <span class="date">January 10, 2026</span>
-        </p>
-
-        <p>
-            <a href="/posts/solana-dashboard-tips.html" class="x-link">Building Better Solana Dashboards</a>
-            <span class="date">December 15, 2025</span>
-        </p>
-        -->
-
+    <div id="posts-list"></div>
   </main>
+
+  <script>
+    async function loadPosts() {
+      try {
+        const response = await fetch('/posts-metadata.json');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const posts = await response.json();
+        const postsList = document.getElementById('posts-list');
+        
+        if (!posts || posts.length === 0) {
+          postsList.innerHTML = '<p>Coming...</p>';
+          return;
+        }
+        
+        const html = posts.map(post => {
+          const tagsHtml = post.tags && post.tags.length > 0 
+            ? `<span class="post-tags">${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}</span>`
+            : '';
+          return `
+          <div class="post-item">
+            <a href="/posts/${post.slug}.html" class="x-link post-title">${post.title}</a>
+            ${tagsHtml}
+            <span class="date">${post.date}</span>
+          </div>
+        `}).join('');
+        
+        postsList.innerHTML = html;
+      } catch (error) {
+        console.error('Failed to load posts:', error);
+        document.getElementById('posts-list').innerHTML = '<p>Error loading posts.</p>';
+      }
+    }
+    
+    loadPosts();
+  </script>
 
   <script type="module" src="/src/main.ts"></script>
 </body>

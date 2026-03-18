@@ -14,6 +14,24 @@ Live at: https://osk.cool/
 - System fonts for fast loading
 - Simple navigation: Home · Posts · GitHub · X
 - Contact info with direct email and X link
+- **Blog system**: Drop `.md` files in `/posts`, run `npm run build`, posts auto-generate
+
+## Blog System
+
+Add posts by creating markdown files in `/posts/` with frontmatter:
+
+```yaml
+---
+title: Your Post Title
+date: 2026-03-18
+tags: #tag1 #tag2
+---
+```
+
+Run `npm run build` to:
+- Convert markdown → HTML
+- Generate post pages at `/posts/slug.html`
+- Update post listing at `/posts` with tags and dates
 
 ## Tech Stack
 

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Osman Sarper Kucuk</title>
-  <link rel="stylesheet" href="/src/style.css" />
+  <title>{{TITLE}} - Osman Sarper Kucuk</title>
+  <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <header>
@@ -12,19 +12,24 @@
     <nav>
       <a href="/posts">Posts</a> ·
       <a href="https://github.com/Osman-SK" target="_blank" rel="noopener noreferrer">GitHub</a> ·
-      <a href="https://x.com/OSK546" target="_blank" rel="noopener noreferrer">X</a>
+      <a href="https://twitter.com/OSK546" target="_blank" rel="noopener noreferrer">X</a>
     </nav>
   </header>
 
   <hr />
 
   <main>
-    <p>Hey there. I'm Osman – interested in onchain data engineering & analytics.</p>
-
-    <p>To reach me DM me on <a href="https://x.com/OSK546" target="_blank" rel="noopener noreferrer" class="x-link">X</a>,<br>or email at osman.kucuk@live.com</a></p>
+    <article class="post">
+      <h3>{{TITLE}}</h3>
+      <p class="post-meta">
+        <span class="date">{{DATE}}</span>
+      </p>
+      <hr />
+      <div class="post-content">
+        {{CONTENT}}
+      </div>
+    </article>
   </main>
-
-  <hr />
 
   <script type="module" src="/src/main.ts"></script>
 </body>
