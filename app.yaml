@@ -3,49 +3,55 @@ env: standard
 
 handlers:
 
-  # 1. Root URL (/)
+  # Root URL (/)
   - url: /
     static_files: dist/index.html
     upload: dist/index.html
     secure: always
+  
+  # Posts listing page
+  - url: /posts
+    static_files: dist/posts.html
+    upload: dist/posts\.html$
+    secure: always
 
-  # 2. CSS and root-level static files
+  # Links page
+  - url: /links
+    static_files: dist/links.html
+    upload: dist/links.html
+    secure: always
+
+  # CSS and root-level static files
   - url: /style\.css
     static_files: dist/style.css
     upload: dist/style\.css
     secure: always
 
-  # 3. Posts metadata JSON
+  # Posts metadata JSON
   - url: /posts-metadata\.json
     static_files: dist/posts-metadata.json
     upload: dist/posts-metadata\.json
     secure: always
 
-  # 4. Assets (css, js, images, etc.)
+  # Assets (css, js, images, etc.)
   - url: /assets/(.*)
     static_files: dist/assets/\1
     upload: dist/assets/.*
     secure: always
 
-  # 5. Individual post pages
+  # Individual post pages
   - url: /posts/(.*\.html)
     static_files: dist/posts/\1
     upload: dist/posts/.*
     secure: always
-
-  # 6. Posts listing page
-  - url: /posts
-    static_files: dist/posts.html
-    upload: dist/posts\.html$
-    secure: always
   
-  # 7. Catch all 1 for clean URLs with .html extension
+  # Catch all 1 for clean URLs with .html extension
   - url: /(.*)\.html$
     static_files: dist/\1.html
     upload: dist/.*\.html$
     secure: always
 
-  # 7. Catch-all 2 for clean URLs
+  # Catch-all 2 for clean URLs
   - url: /(.*)
     static_files: dist/\1.html
     upload: dist/.*\.html$

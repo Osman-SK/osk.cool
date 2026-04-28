@@ -55,7 +55,7 @@ What to do?
 
 2- If they do need to be with an app, (eg. lend/borrow like AAVE, Jupiter Lend), only use that address and that asset with that app.
 
-3- To minimize phishing attack risk, check out my [previous article](https://osk.cool/posts/defillama-search.html) and use DefiLlama Search.
+3- To minimize phishing attack risk, check out my [previous article](https://osk.cool/posts/01-defillama-search.html) and use DefiLlama Search.
 
 ### 4- Revoke Approvals
 

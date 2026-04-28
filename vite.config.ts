@@ -8,6 +8,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         posts: resolve(__dirname, 'posts.html'),
+        links: resolve(__dirname, 'links.html'),
       }
     }
   }
