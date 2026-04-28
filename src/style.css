@@ -115,10 +115,17 @@ hr {
 
 /* Posts list styles */
 .post-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 1.5rem;
+  margin-bottom: 3.5rem;
+}
+
+.post-left {
   display: flex;
   align-items: baseline;
   gap: 1.5rem;
-  margin-bottom: 2rem;
   flex-wrap: wrap;
 }
 
@@ -145,5 +152,5 @@ hr {
 .date {
   color: #666;
   font-size: 0.85rem;
-  margin-left: auto;
+  white-space: nowrap;
 }

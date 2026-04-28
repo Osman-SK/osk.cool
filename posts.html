@@ -43,10 +43,13 @@
             : '';
           return `
           <div class="post-item">
-            <a href="/posts/${post.slug}.html" class="x-link post-title">${post.title}</a>
-            ${tagsHtml}
+            <div class="post-left">
+              <a href="/posts/${post.slug}.html" class="x-link post-title">${post.title}</a>
+              ${tagsHtml}
+            </div>
             <span class="date">${post.date}</span>
           </div>
+          <p></p>
         `}).join('');
         
         postsList.innerHTML = html;

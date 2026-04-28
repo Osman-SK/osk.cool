@@ -38,8 +38,14 @@ handlers:
     static_files: dist/posts.html
     upload: dist/posts\.html$
     secure: always
+  
+  # 7. Catch all 1 for clean URLs with .html extension
+  - url: /(.*)\.html$
+    static_files: dist/\1.html
+    upload: dist/.*\.html$
+    secure: always
 
-  # 7. Catch-all for clean URLs
+  # 7. Catch-all 2 for clean URLs
   - url: /(.*)
     static_files: dist/\1.html
     upload: dist/.*\.html$
