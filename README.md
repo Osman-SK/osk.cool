@@ -20,7 +20,7 @@ Live at: https://osk.cool/
 
 Add posts by creating markdown files in `/posts/` with frontmatter:
 
-```yaml
+```md
 ---
 title: Your Post Title
 date: 2026-03-18

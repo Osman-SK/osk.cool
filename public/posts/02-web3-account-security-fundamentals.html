@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web3 Account Security Fundamentals - Osman Sarper Kucuk</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .post-content h2,
+    .post-content h3,
+    .post-content h4,
+    .post-content h5,
+    .post-content h6 {
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .post-content h2 { font-size: 1.5rem; }
+    .post-content h3 { font-size: 1.3rem; }
+    .post-content p { margin-bottom: 1.75rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="/">Osman Sarper Kucuk</a></h1>
+    <nav>
+      <a href="/posts">Posts</a> ·
+      <a href="https://github.com/Osman-SK" target="_blank" rel="noopener noreferrer">GitHub</a> ·
+      <a href="https://twitter.com/OSK546" target="_blank" rel="noopener noreferrer">X</a>
+    </nav>
+  </header>
+
+  <hr />
+
+  <main>
+    <article class="post">
+      <h3>Web3 Account Security Fundamentals</h3>
+      <p class="post-meta">
+        <span class="date">April 27, 2026</span>
+      </p>
+      <hr />
+      <div class="post-content">
+        <h3>Intro</h3>
+<p>Hacks seem to be gaining up steam these days.</p>
+<p>CoW Swap front end attack, Drift protocol hack, AAVE compromises of March and April, 2026 is just as eventful as any other crypto-year, unfortunately. </p>
+<p>I personally had interesting phishing attempts over TG. </p>
+<p>Combined with AI, tricks are more nuanced and customized. Thus web3 security fundamentals are arguably more important than ever. Got that hardware wallet yet?</p>
+<p>Good time to remind ourselves the battle tested security fundamentals. So, what are they? Where do we start?</p>
+<p>Well lets do start at exchanges, since CEXs are still most popular on/off-ramps for most web3 users. Remember the phrase?</p>
+<h3>1- Not your keys, not your assets.</h3>
+<p>If crypto natives learned anything since the famous Mt. Gox hack, it is that if you are not holding keys to your digital assets, someone else does, and that might include hackers :/</p>
+<p>So how shall you have them?</p>
+<h3>2- Use Hardware wallets; safely store keys.</h3>
+<p>The simplest and most effective way to protect yourself is to own and use hardware wallets.</p>
+<p>There are many options ranging from redit card sized (eg. Solflare Shield) hardware wallets to air gapped devices (eg. Keystone). OGs like Trezor have &quot;quantum ready&quot; and wireless-convenient devices (Trezor Safe 7).</p>
+<p>Beware of the one, Ledger, who had customer data leaked and very aggressive app tracking policies.</p>
+<p>The choice is yours, do not complicate, pick the one you vibe. Buy from directly from the manufacturer, test with small amounts before using large amounts. Then, make sure to safely store keys offline again -- in case you lose your hardware wallet. </p>
+<h3>3- Separate accounts (by apps/smart contracts)</h3>
+<p>It sucks that even if you use a hardware wallet, you might be a victim. Arguably this is the situation that might suck the most. </p>
+<p>You owned your keys. 
+You stored them safely with HWs. 
+Yet you still managed to get hacked. WTF? </p>
+<p>Yes, unfortunately the work is not done. If you have smart contract interactions in a wallet, you are still at risk in two major attack vectors :</p>
+<ul>
+<li>Protocol exploit or malicious upgrade (think of smart contract compromises)</li>
+<li>Phishing with a fake approval (think of front end compromises)</li>
+</ul>
+<p>What to do?</p>
+<p>1- If your assets do not need to be with an app/protocol move them to a virgin address; an address that has not interacted with any smart contracts/apps/protocols.</p>
+<p>2- If they do need to be with an app, (eg. lend/borrow like AAVE, Jupiter Lend), only use that address and that asset with that app.</p>
+<p>3- To minimize phishing attack risk, check out my <a href="https://osk.cool/posts/defillama-search.html">previous article</a> and use DefiLlama Search.</p>
+<h3>4- Revoke Approvals</h3>
+<p>To be safe and eliminate an attack vector, remove token (transfer) approvals granted to apps/smart contracts used. Remove them immediately after using or periodically to stay safer.</p>
+<p>2 options to revoke approvals:</p>
+<ul>
+<li>Etherscan token approval checker</li>
+<li>revoke.cash</li>
+</ul>
+<h3>Conclusion</h3>
+<p>Since 2015 smart contract blockchains are with us, and to be frank, unfortunately some of them still suck to use. Too much opsec needed to interact with blockchains safely and you CANNOT skip it unless you are ok that you might lose funds. However, do not lose sight, freedom is what you get if you invest in a bit of learning. </p>
+
+      </div>
+    </article>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

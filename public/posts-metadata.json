@@ -1,6 +1,13 @@
 [
   {
-    "slug": "defillama-search",
+    "slug": "02-web3-account-security-fundamentals",
+    "title": "Web3 Account Security Fundamentals",
+    "date": "2026-04-27",
+    "author": "Osman Sarper Kucuk",
+    "excerpt": "Intro\n\nHacks seem to be gaining up steam these days.\n\nCoW Swap front end attack, Drift protocol hack, AAVE compromises of March and April, 2026 is jus..."
+  },
+  {
+    "slug": "01-defillama-search",
     "title": "DefiLlama Search",
     "date": "2026-03-15",
     "author": "Osman Sarper Kucuk",
