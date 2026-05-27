@@ -12,7 +12,7 @@ Live at: https://osk.cool/
 - Dark theme only
 - Responsive & mobile-friendly
 - System fonts for fast loading
-- Simple navigation: Home · Posts · GitHub · X
+- Simple navigation: Posts · Links
 - Contact info with direct email and X link
 - **Blog system**: Drop `.md` files in `/posts`, run `npm run build`, posts auto-generate
 
