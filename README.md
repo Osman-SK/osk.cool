@@ -65,6 +65,9 @@ Authenticate and set your project:
 gcloud auth login
 gcloud config set project YOUR_PROJECT_ID
 
+#clear dist/ folder
+rm -rf ./dist
+
 #build and deploy:
 npm run build
 gcloud app deploy
