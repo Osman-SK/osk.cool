@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NAS/Media Server OSs vs Ubuntu Server - Osman Sarper Kucuk</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .post-content h2,
+    .post-content h3,
+    .post-content h4,
+    .post-content h5,
+    .post-content h6 {
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .post-content h2 { font-size: 1.5rem; }
+    .post-content h3 { font-size: 1.3rem; }
+    .post-content p { margin-bottom: 1.75rem; }
+    .post-content ul,
+    .post-content ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .post-content li {
+      margin-bottom: 0.5rem;
+    }
+    .post-content blockquote {
+      border-left: 3px solid #444;
+      padding-left: 1rem;
+      margin-bottom: 1.75rem;
+      color: #aaa;
+    }
+    .post-content pre {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin-bottom: 1.75rem;
+    }
+    .post-content code {
+      background: #1a1a1a;
+      padding: 0.15rem 0.3rem;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .post-content pre code {
+      padding: 0;
+      background: none;
+    }
+    .post-content hr {
+      margin: 2.5rem 0;
+      border: 0;
+      height: 1px;
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="/">Osman Sarper Kucuk</a></h1>
+    <nav>
+      <a href="/posts">Posts</a> ·
+      <a href="/links">Links</a>
+    </nav>
+  </header>
+
+  <hr />
+
+  <main>
+    <article class="post">
+      <h3>NAS/Media Server OSs vs Ubuntu Server</h3>
+      <p class="post-meta">
+        <span class="date">May 30, 2026</span>
+      </p>
+      <hr />
+      <div class="post-content">
+        <p>Recently I wanted to use and experiment with NAS/media servers, bought a cheap, second hand PC for it.</p>
+<p>I want to have a couple of services mainly:</p>
+<ul>
+<li>media-share locally eg. NFS, </li>
+<li>syncing docs across devices (eg. nextcloud container), </li>
+<li>Ability to experiment with jellyfin like media services, I heard a lot about them.</li>
+</ul>
+<p>Initially I thought, if i have a simple media server/NAS (network attached storage) OS (operating system), server services would go smoother. So I picked one of the simplest NAS OS out there: openmediaserver (OMV).</p>
+<p>Things worked out quite the opposite though.</p>
+<p>Even for relatively small changes or management I had NAS OS fighting me in every step of the way. Came to realize that OMV and likely other NAS operating systems want changes and management done their way, on their interface. If you wanna use cli to get things done, this approach interferes with how the OMV and likely other OSs operate, giving you weird errors, problems as you go about running your server.</p>
+<p>For example, wanna docker? Gotto use third party app store thing on OMV, download their docker app, manage docker services there, otherwise you run into weird complications when running docker apps on OMV. </p>
+<p>Wanted a simple: 
+<code>apt update &amp;&amp; apt upgrade</code>? 
+Nooo cli warrior, you gotto use the web interface otherwise you get degraded systemd status and apt errors along the way (was a great learning experience though).</p>
+<p>I wanted a simple solution to my NAS and Media problems, I got more problems thrown on my way.</p>
+<p>My conclusion is that GUI (graphical user interface) oriented NAS/Media Server OSs are for those who do not want to use or inexperienced with CLI. Drop the GUI, use cli &amp; associated tools, tinker to your heart&#39;s content. It might be harder at first, because you might not be familiar with tools, but after some time spent, I believe it will be a smoother process, at least for me in the context of NAS and Media Server operations.</p>
+<p>I am thinking about transitioning to just vanilla Ubuntu Server and then add whatever I need. </p>
+<p>Cheers for the ability to run your own servers.</p>
+
+      </div>
+    </article>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

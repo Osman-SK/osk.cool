@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Network File Share (NFS) Setup - Osman Sarper Kucuk</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .post-content h2,
+    .post-content h3,
+    .post-content h4,
+    .post-content h5,
+    .post-content h6 {
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .post-content h2 { font-size: 1.5rem; }
+    .post-content h3 { font-size: 1.3rem; }
+    .post-content p { margin-bottom: 1.75rem; }
+    .post-content ul,
+    .post-content ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .post-content li {
+      margin-bottom: 0.5rem;
+    }
+    .post-content blockquote {
+      border-left: 3px solid #444;
+      padding-left: 1rem;
+      margin-bottom: 1.75rem;
+      color: #aaa;
+    }
+    .post-content pre {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin-bottom: 1.75rem;
+    }
+    .post-content code {
+      background: #1a1a1a;
+      padding: 0.15rem 0.3rem;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .post-content pre code {
+      padding: 0;
+      background: none;
+    }
+    .post-content hr {
+      margin: 2.5rem 0;
+      border: 0;
+      height: 1px;
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="/">Osman Sarper Kucuk</a></h1>
+    <nav>
+      <a href="/posts">Posts</a> ·
+      <a href="/links">Links</a>
+    </nav>
+  </header>
+
+  <hr />
+
+  <main>
+    <article class="post">
+      <h3>Network File Share (NFS) Setup</h3>
+      <p class="post-meta">
+        <span class="date">June 25, 2026</span>
+      </p>
+      <hr />
+      <div class="post-content">
+        <h3>Intro</h3>
+<p>I shared a bit about my frustrations with GUI based media OS <a href="https://osk.cool/posts/03-nasmedia-server-oss-vs-ubuntu-server.html">in the post here [1]</a>. In these systems everything is easier to point and click at the cost of customization and CLI freedom. It works for most, not for me. </p>
+<p>One of the most important functions of any server is to share files. There are many options including: </p>
+<ul>
+<li>NFS (Network File Share, Linux based)</li>
+<li>SMB (Server Message block, Windows based)</li>
+<li>WebDAV (Web Distributed Authoring and Versioning, HTTP(S) based)</li>
+<li>SFTP (SSH File Transfer Protocol)</li>
+</ul>
+<p>If you do not have Windows workflows, NFS is an easy choice in my opinion.</p>
+<p>So how does one go about sharing file systems with other devices in the network via NFS? </p>
+<h3>Section  1: Installation</h3>
+<p>Well, as with most problems, there is a package for that and the binary package name is nfs-kernel-server. As it was the recommended pack and maintained by Ubuntu Devs, I went with it.</p>
+<p>Commands to install and inspect are as follows:</p>
+<pre><code class="language-bash">
+apt show nfs-kernel-server   # optional if you&#39;d like to read more on it; press q to quit after reading.
+
+sudo apt install nfs-kernel-server   # click y/yes after prompt, this will install package
+
+sudo systemctl enable --now nfs-kernel-server   # --now to start 
+
+sudo systemctl status nfs-kernel-server.service   # check if it is enable and active/running
+</code></pre>
+<p>These commands shall conclude the installation section.</p>
+<h3>Section 2: Configuration</h3>
+<p>Alright installation done. Before the config edits; if not mounted yet; do 
+create and/or mount directory(ies) to be shared:</p>
+<pre><code class="language-bash">
+#  or create and bind if needed
+
+mkdir -p /srv/nfs/...   
+
+sudo mount --bind /mnt/Media-HDD /srv/nfs/...
+</code></pre>
+<p>Now onto the NFS config:</p>
+<p>NFS configuration is mainly done via a single config file, which located here: 
+/etc/exports</p>
+<p>Explore and configure on on CLI:</p>
+<pre><code class="language-bash">
+man 5 exports   # manual pages for detailed inspection
+
+sudo vim /etc/exports   # open with sudo (otherwise read-only)
+</code></pre>
+<p>configuration file is a simple list of file location separated by ip addresses and config options. Looks like this:</p>
+<pre><code class="language-bash">
+# Example /etc/exports file for NFSv4:
+/srv/nfs4/device1  192.168.1.100(rw,sync,no_subtree_check) # Single Device/IP
+/srv/nfs4/home  192.168.1.0/24(ro,sync,no_subtree_check) # Whole Local Network
+</code></pre>
+<p>Where to serve, mount, locate each directory, disk, is an interesting topic by itself I want to explore and write a blog about, a <a href="https://grokipedia.com/page/Filesystem_Hierarchy_Standard#directory-hierarchy">useful resource link here [2]</a></p>
+<p>A few configuration option explanations <a href="https://grok.com/share/bGVnYWN5_715bc35c-4890-45bf-81bd-869788183531">per Grok [3]</a>:</p>
+<p>ro / rw: Read-only (default behavior) or read-write.</p>
+<p>sync / async: Reply only after data is committed to disk (sync; default, safer) vs. reply immediately; risk of data loss on crash, async.</p>
+<p>no_subtree_check: default disabled behavior for it may cause in modern systems</p>
+<h3>Section 3: Configuration on Client</h3>
+<p>This section is mostly optional. However if you are using MacOS, it is better to prep the machine for NFS. Media devices like Apple TV, ChromeCast etc usually detect via their own applications from their app stores; eg. VLC, Infuse, Plex</p>
+<pre><code class="language-bash">
+# fill your own ip address of the server below:
+
+sudo mount -t nfs -o resvport,vers=4,ro 192.168.X.X:/srv/nfs/... /Volumes/nfs-disk
+
+# mount command options: 
+# 
+# -t for type, ours was nfs
+# -o for options 
+# nfs version (vers=4) and readonly specifed
+# 
+# resvport stands for &quot;reserved port&quot;.
+# It forces the NFS client to connect to the server using a privileged port (a port number below 1024).
+# not default on MacOS
+</code></pre>
+<p>Using this configuration on MacOS shall alleviate connection problems.</p>
+<p>Now enjoy your NFS setup!</p>
+<h3>References</h3>
+<p>[1] Previous Post on Ubuntu Server: <a href="https://osk.cool/posts/03-nasmedia-server-oss-vs-ubuntu-server.html">https://osk.cool/posts/03-nasmedia-server-oss-vs-ubuntu-server.html</a></p>
+<p>[2] File System Hierarchy Standard: <a href="https://grokipedia.com/page/Filesystem_Hierarchy_Standard#directory-hierarchy">https://grokipedia.com/page/Filesystem_Hierarchy_Standard#directory-hierarchy</a></p>
+<p>[3] NFSv4 /etc/export file config options: <a href="https://grok.com/share/bGVnYWN5_715bc35c-4890-45bf-81bd-869788183531">https://grok.com/share/bGVnYWN5_715bc35c-4890-45bf-81bd-869788183531</a></p>
+
+      </div>
+    </article>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

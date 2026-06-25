@@ -1,5 +1,19 @@
 [
   {
+    "slug": "04-network-file-share-setup",
+    "title": "Network File Share (NFS) Setup",
+    "date": "2026-06-25",
+    "author": "Osman Sarper Kucuk",
+    "excerpt": "Intro\n\nI shared a bit about my frustrations with GUI based media OS [in the post here [1]](https://osk.cool/posts/03-nasmedia-server-oss-vs-ubuntu-ser..."
+  },
+  {
+    "slug": "03-nas-or-media-server-oss-vs-ubuntu-server-copy",
+    "title": "NAS/Media Server OSs vs Ubuntu Server",
+    "date": "2026-05-30",
+    "author": "Osman Sarper Kucuk",
+    "excerpt": "Recently I wanted to use and experiment with NAS/media servers, bought a cheap, second hand PC for it.\n\nI want to have a couple of services mainly:\n\n-..."
+  },
+  {
     "slug": "02-web3-account-security-fundamentals",
     "title": "Web3 Account Security Fundamentals",
     "date": "2026-04-27",
