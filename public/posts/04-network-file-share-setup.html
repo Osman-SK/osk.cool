@@ -121,7 +121,7 @@ sudo vim /etc/exports   # open with sudo (otherwise read-only)
 </code></pre>
 <p>configuration file is a simple list of file location separated by ip addresses and config options. Looks like this:</p>
 <pre><code class="language-bash">
-# Example /etc/exports file for NFSv4:
+# Example /etc/exports file configuration for NFSv4:
 /srv/nfs4/device1  192.168.1.100(rw,sync,no_subtree_check) # Single Device/IP
 /srv/nfs4/home  192.168.1.0/24(ro,sync,no_subtree_check) # Whole Local Network
 </code></pre>
@@ -130,6 +130,13 @@ sudo vim /etc/exports   # open with sudo (otherwise read-only)
 <p>ro / rw: Read-only (default behavior) or read-write.</p>
 <p>sync / async: Reply only after data is committed to disk (sync; default, safer) vs. reply immediately; risk of data loss on crash, async.</p>
 <p>no_subtree_check: default disabled behavior for it may cause in modern systems</p>
+<h4>Apply Changes:</h4>
+<p>One last thing; we need to apply changes to /etc/exports and check by following commands:</p>
+<pre><code class="language-bash">
+sudo exportfs -a   # apply changes to /etc/exports file 
+
+sudo exportfs -s   # check; show applied changes/configuration
+</code></pre>
 <h3>Section 3: Configuration on Client</h3>
 <p>This section is mostly optional. However if you are using MacOS, it is better to prep the machine for NFS. Media devices like Apple TV, ChromeCast etc usually detect via their own applications from their app stores; eg. VLC, Infuse, Plex</p>
 <pre><code class="language-bash">

@@ -77,7 +77,7 @@ configuration file is a simple list of file location separated by ip addresses a
 
 ```bash
 
-# Example /etc/exports file for NFSv4:
+# Example /etc/exports file configuration for NFSv4:
 /srv/nfs4/device1  192.168.1.100(rw,sync,no_subtree_check) # Single Device/IP
 /srv/nfs4/home  192.168.1.0/24(ro,sync,no_subtree_check) # Whole Local Network
 
@@ -92,6 +92,18 @@ ro / rw: Read-only (default behavior) or read-write.
 sync / async: Reply only after data is committed to disk (sync; default, safer) vs. reply immediately; risk of data loss on crash, async.
 
 no_subtree_check: default disabled behavior for it may cause in modern systems
+
+#### Apply Changes:
+
+One last thing; we need to apply changes to /etc/exports and check by following commands:
+
+```bash
+
+sudo exportfs -a   # apply changes to /etc/exports file 
+
+sudo exportfs -s   # check; show applied changes/configuration
+
+```
 
 ### Section 3: Configuration on Client 
 
