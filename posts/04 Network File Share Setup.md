@@ -91,7 +91,7 @@ ro / rw: Read-only (default behavior) or read-write.
 
 sync / async: Reply only after data is committed to disk (sync; default, safer) vs. reply immediately; risk of data loss on crash, async.
 
-no_subtree_check: default disabled behavior for it may cause in modern systems
+no_subtree_check: default disabled behavior for it may cause issues in modern systems when renaming/moving folders inside exported directories.
 
 #### Apply Changes:
 
@@ -111,7 +111,11 @@ This section is mostly optional. However if you are using MacOS, it is better to
 
 ```bash
 
-# fill your own ip address of the server below:
+# do not forget to create the mount folder if it does not exist:
+
+sudo mkdir -p /Volumes/nfs-disk
+
+# fill your own ip address of the server below and mount to created/existing folder:
 
 sudo mount -t nfs -o resvport,vers=4,ro 192.168.X.X:/srv/nfs/... /Volumes/nfs-disk
 

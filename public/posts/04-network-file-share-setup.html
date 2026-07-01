@@ -129,7 +129,7 @@ sudo vim /etc/exports   # open with sudo (otherwise read-only)
 <p>A few configuration option explanations <a href="https://grok.com/share/bGVnYWN5_715bc35c-4890-45bf-81bd-869788183531">per Grok [3]</a>:</p>
 <p>ro / rw: Read-only (default behavior) or read-write.</p>
 <p>sync / async: Reply only after data is committed to disk (sync; default, safer) vs. reply immediately; risk of data loss on crash, async.</p>
-<p>no_subtree_check: default disabled behavior for it may cause in modern systems</p>
+<p>no_subtree_check: default disabled behavior for it may cause issues in modern systems when renaming/moving folders inside exported directories.</p>
 <h4>Apply Changes:</h4>
 <p>One last thing; we need to apply changes to /etc/exports and check by following commands:</p>
 <pre><code class="language-bash">
@@ -140,7 +140,11 @@ sudo exportfs -s   # check; show applied changes/configuration
 <h3>Section 3: Configuration on Client</h3>
 <p>This section is mostly optional. However if you are using MacOS, it is better to prep the machine for NFS. Media devices like Apple TV, ChromeCast etc usually detect via their own applications from their app stores; eg. VLC, Infuse, Plex</p>
 <pre><code class="language-bash">
-# fill your own ip address of the server below:
+# do not forget to create the mount folder if it does not exist:
+
+sudo mkdir -p /Volumes/nfs-disk
+
+# fill your own ip address of the server below and mount to created/existing folder:
 
 sudo mount -t nfs -o resvport,vers=4,ro 192.168.X.X:/srv/nfs/... /Volumes/nfs-disk
 
