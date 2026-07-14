@@ -1,0 +1,975 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grand Linux Command Cheat Sheet - Osman Sarper Kucuk</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .post-content h2,
+    .post-content h3,
+    .post-content h4,
+    .post-content h5,
+    .post-content h6 {
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .post-content h2 { font-size: 1.5rem; }
+    .post-content h3 { font-size: 1.3rem; }
+    .post-content p { margin-bottom: 1.75rem; }
+    .post-content ul,
+    .post-content ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .post-content li {
+      margin-bottom: 0.5rem;
+    }
+    .post-content blockquote {
+      border-left: 3px solid #444;
+      padding-left: 1rem;
+      margin-bottom: 1.75rem;
+      color: #aaa;
+    }
+    .post-content pre {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin-bottom: 1.75rem;
+    }
+    .post-content code {
+      background: #1a1a1a;
+      padding: 0.15rem 0.3rem;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .post-content pre code {
+      padding: 0;
+      background: none;
+    }
+    .post-content hr {
+      margin: 2.5rem 0;
+      border: 0;
+      height: 1px;
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="/">Osman Sarper Kucuk</a></h1>
+    <nav>
+      <a href="/posts">Posts</a> ·
+      <a href="/links">Links</a>
+    </nav>
+  </header>
+
+  <hr />
+
+  <main>
+    <article class="post">
+      <h3>Grand Linux Command Cheat Sheet</h3>
+      <p class="post-meta">
+        <span class="date">July 8, 2026</span>
+      </p>
+      <hr />
+      <div class="post-content">
+        <pre><code class="language-bash">
+### ============================================
+### USEFUL IN WIDE RANGE
+### ============================================
+
+&lt;cmd&gt; -h
+&lt;cmd&gt; --help
+&lt;cmd&gt; &lt;sub-cmd&gt; -h
+
+man &lt;command&gt;
+man -k &lt;pattern&gt; 
+man &lt;section&gt; &lt;command&gt;
+
+command -V &lt;cmd&gt;
+command -v &lt;cmd&gt;
+which &lt;cmd&gt;
+type &lt;cmd&gt;
+
+file &lt;file&gt;
+
+tldr &lt;command&gt; # brew info tealdeer (linuxbrew too!)
+
+&lt;cmd&gt; --version  # quick way to check if it is installed, version
+vim --version | head -1
+
+### ============================================
+### GENERAL / SYSTEM INFORMATION
+### ============================================
+
+uname                # unix name
+uname -a             # -a for all
+
+cat /etc/os-release
+
+fastfetch
+neofetch
+
+w
+who
+whoami
+
+hostnamectl -h
+hostnamectl          # hostname info
+hostnamectl status   # same as above
+
+hostname
+hostname -i          # ip address
+hostname -I          # all IP addresses
+
+id
+id &lt;user&gt;
+id root
+id 1000
+id -u &lt;user&gt;            # user ID
+id -g &lt;user&gt;            # group ID
+
+groups               # show group membership
+groups &lt;user&gt;
+
+printenv
+printenv PATH
+printenv SHELL
+
+echo $0              # current shell/script
+echo $SHELL          # default shell
+
+uptime
+
+date
+timedatectl
+timedatectl -a       # show all properties
+timedatectl -h
+
+free -h
+
+df -h                # df: disk free
+df -Th               # with filesystem type
+
+du -sh ~/*           # du: disk usage, -s summarize, -h human-readable
+du -sh ~/Documents/* | sort -hr
+
+lsblk                # LiSt BLocK devices
+lsblk -f             # with filesystem info
+lsblk -o NAME,SIZE,TYPE,MOUNTPOINT,MODEL
+
+lscpu                # Display info on the CPU arch.
+
+chsh
+chsh -s &lt;shell_Path&gt;
+
+sudo shutdown -h now    # macOS
+sudo shutdown -P now    # Linux
+sudo shutdown -P +5 
+
+sudo reboot
+
+### ============================================
+### NAVIGATION, FILES &amp; DIRECTORIES
+### ============================================
+
+pwd
+
+cd
+cd ~
+cd $HOME
+cd -
+cd /etc
+cd ../..
+
+ls
+ls -l
+ls -lahF --color=auto
+ls -Salh                 # sort by size, largest first
+ls -1
+alias ls=&quot;ls -lahF --color=auto&quot;
+
+find . -iname &#39;*git*&#39; 
+find ~/Desktop/Files/Docs/ -iname &quot;*Samsung*&quot;
+find ~/Documents | wc -l   # count how many files, folders, including top folder
+
+locate &lt;pattern?&gt;
+updatedb                # updates locate db for faster finds
+
+stat &lt;file&gt;
+
+tree [path]
+tree -L 2 [path]
+tree -L 1 --dirsfirst [path]
+
+mkdir newfolder
+mkdir -p projects/work/2026/devops/kubecraft
+
+touch newfile.txt
+touch script.sh
+
+cp file.txt backup.txt
+cp -r folder/ /backup/
+cp -r ~/Desktop/ &lt;user&gt;@&lt;hostname&gt;:/home/&lt;user&gt; # scp priority
+
+mv oldname.txt newname.txt
+mv -i file.txt destination/    # -i prompts bfore overwriting
+
+rm file.txt                    # might use mv /path/to/Trash
+rm -r folder                   # WATCH OUT
+rm -rf /path/to/folder/*       # DANGEROUS
+sudo rm -rf /path/to/folder/*  # VERY!!! DANGEROUS!!!
+
+rmdir empty_directory_only
+
+file /bin/bash
+file /etc
+file  ~/.bashrc
+
+realpath script.sh             # show full path
+
+### ============================================
+### VIEWING &amp; TEXT PROCESSING
+### ============================================
+
+cat file.txt
+cat file1.txt file2.txt &gt; combined.txt
+
+
+# less =========================================
+
+less file.txt
+less +F /var/log/syslog        # follow mode (like tail -f)
+
+&lt;stdin&gt; |  less 
+# Navigation:
+space | f | pageDown # f for forward
+b | pageUp      # b for back
+/&lt;pattern&gt;      # search pattern
+n    # next 
+N    # reverse-next
+
+g    # be&quot;g&quot;inning  
+G    # end
+
+q    # &quot;q&quot;uit
+# less =========================================
+
+
+head file.txt
+head -20 file.txt
+head -1 file.txt
+&lt;stdin&gt; | head # default 10
+&lt;stdin&gt; | head -30
+head !*        # take all args of prev cmd
+
+tail file.txt
+tail -20 file.txt
+tail -f /var/log/syslog        # follow / watch live
+tail -n +100 file.txt          # from line 100 to end
+
+# grep =======================
+
+&lt;stdin&gt; | grep &quot;pattern&quot; 
+man curl | grep -A 2 -B 2 &quot;\\-O&quot;  # escape regex with \\
+
+grep &quot;pattern&quot; file.txt
+
+grep -ri &quot;fail&quot; /var/log/  # -r recursive; -i case insensitive
+
+grep -B 2 -A 2 &quot;error&quot; app.log # -B before -A after (lines)
+
+grep -v &quot;debug&quot; file.txt   # patterns that do not match &#39;pattern&#39;
+
+grep &quot;root&quot; /etc/passwd    # see root user-id
+grep &quot;^root&quot; /etc/passwd   # starts with root
+grep &quot;bash{{CONTENT}}quot; /etc/passwd   # ends with bash
+
+grep -E &quot;[0-9]{3,}&quot; file.txt   # regex example
+
+# grep =======================
+
+
+# cut, tr, sed, tee (text processing)
+echo &quot;hello:world:2026&quot; | cut -d: -f2
+echo &quot;Hello World&quot; | tr &#39;A-Z&#39; &#39;a-z&#39;
+echo &quot;hello123&quot; | tr -d &#39;0-9&#39;
+echo &quot;line1&quot; | tee output.txt | wc -l
+
+cat names.txt | xargs -n 1 echo &quot;Hello&quot;
+
+sed &#39;s/old/new/g&#39; file.txt
+sed -i &#39;s/old/new/g&#39; file.txt     # in-place edit (use with caution)
+
+# regex
+^...$ = starts and ends with 
+
+^     = starts with
+grep  &quot;^root&quot; /etc/passwd
+
+$     = ends with
+grep &quot;bash{{CONTENT}}quot; /etc/passwd
+
+[0-9] = any digit
+\\    = escape regex chars eg. grep &quot;\\&lt;regex char&gt;&quot;
+\     = escape regex chars eg. vim /&quot;\[&quot;
+
+### ============================================
+### HISTORY, REPEAT &amp; COMMAND LINE
+### ============================================
+
+history
+history | tail -20
+history | grep apt
+history | grep &quot;\\?&quot;    # escape regex with &quot;\\&quot;
+
+!1234                   # run history command #1234
+
+!!                      # repeat last command
+sudo !!                 # sudo last command
+
+!$                      # last argument of previous command
+!*                      # all args of prev cmd
+
+fc -ln -1 | pbcopy      # copy last command (macOS)
+
+command -V apt          # verbose info about command
+command -v apt
+
+which apt
+
+type apt
+
+man apt
+
+tldr apt                # if tldr client installed
+
+&lt;cmd&gt; | tail -5
+&lt;cmd&gt; | grep &quot;foo&quot; | less
+
+### ============================================
+### PROCESS &amp; JOB CONTROL
+### ============================================
+
+ps
+ps aux
+ps aux | grep nginx
+
+pstree
+pstree | less
+pstree -p           # w/ process id
+pstree &lt;user-name&gt;
+
+pgrep nginx
+pgrep -a sshd
+
+top
+
+htop
+
+btop
+
+kill 1234
+kill -9 1234                      # force kill
+killall firefox
+
+sleep 10 &amp;
+sleep 60 &amp;
+
+jobs        # show bg jobs
+jobs -l     # show bg job pids
+jobs -p     # only show bg job pids
+
+bg          # tell if background jobs present
+
+fg          # brings the most recent (+ ) job to foreground
+
+fg %1
+fg %sleep
+fg %?nginx
+
+### ============================================
+### SSH &amp; REMOTE ACCESS
+### ============================================
+
+/usr/bin/ssh [-v] &lt;user&gt;@&lt;hostname&gt;
+
+ssh &lt;user&gt;@192.168.X.X
+ssh -v &lt;user&gt;@&lt;hostname&gt;.local
+ssh &lt;user&gt;@hostname.local
+
+ssh-keygen -t ed25519 -C &quot;github-mac&quot;
+ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_github -C &quot;github&quot;
+ssh-keygen -c -f ~/.ssh/id_ed25519_github     # change comment
+
+ssh-add &lt;private-key-file&gt; 
+ssh-add ~/.ssh/id_ed25519_github
+ssh-add -L # Lists public key parameters of identities represented by the agent. 
+ssh-add -l # Lists fingerprints of all identities represented by the agent
+ssh-add -d ~/.ssh/id_ed25519_github
+
+ssh-copy-id &lt;user&gt;@192.168.X.X
+ssh-copy-id -i ~/.ssh/id_ed25519_github &lt;user&gt;@192.168.X.X
+
+eval &quot;$(ssh-agent -s)&quot; 
+# Could not open a connection to your authentication agent. 
+# start the SSH authentication agent and immediately configure your current shell session to use it
+# The -s flag tells it to output Bourne/POSIX shell syntax (as opposed to -c for C shell).
+
+scp file.txt &lt;user&gt;@&lt;hostname&gt;:/home/&lt;user&gt;/
+scp -r folder/ &lt;user&gt;@&lt;hostname&gt;:/home/&lt;user&gt;/
+
+rsync -avz folder/ &lt;user&gt;@&lt;hostname&gt;:/home/&lt;user&gt;/backup/
+
+# SSH File Locations:
+~/.ssh/
+~/.ssh/config   
+~/.ssh/id_ed25519_github
+~/.ssh/id_ed25519_github.pub 
+
+### ============================================
+### USERS, GROUPS &amp; PERMISSIONS
+### ============================================
+
+passwd   # change password
+
+sudo -i  # sign in root
+exit     # exit root
+
+sudo -u &lt;username&gt; &lt;command&amp;args&gt;
+sudo -k    # reset sudo use timer 
+
+sudo su 
+
+sudo adduser newuser
+
+sudo deluser olduser
+sudo deluser --remove-home olduser
+
+sudo usermod -aG &lt;groupName&gt; &lt;userName&gt;
+
+sudo groupadd &lt;group-name&gt;        # Create normal group
+sudo groupadd developers               
+sudo groupadd -g 2000 devops      # Create group with specific GID
+sudo groupdel developers
+sudo groupmod -n newname oldname
+
+sudo chown &lt;user&gt;:&lt;user&gt; file.txt
+sudo chown -R 1000:1000 /nextcloud/
+sudo chown -R nobody:nogroup /data/
+
+# Numeric chmod:
+# 7 = rwx (4+2+1)
+# 6 = rw-
+# 5 = r-x
+# 0 = ---
+
+chmod 755 file          # rwxr-xr-x
+chmod 644 file          # rw-r--r--
+chmod 600 private_key   # rw-------
+chmod 700 private_dir   # rwx------
+
+chmod +x script.sh
+chmod u+x &lt;file&gt;  # change to executable for user only 
+chmod o-x &lt;file&gt;  # remove executable for others
+chmod g+w &lt;file&gt;  # add write for group
+
+umask 022
+
+
+### ============================================
+### PACKAGE MANAGEMENT
+### ============================================
+
+# --- apt (Debian/Ubuntu) ---
+sudo apt update
+
+sudo apt upgrade
+sudo apt upgrade -y
+
+sudo apt full-upgrade
+
+apt search htop
+apt search &quot;^htop{{CONTENT}}quot;
+
+apt show &lt;package&gt;
+apt show htop
+
+sudo apt install &lt;package&gt; 
+sudo apt install htop tree curl vim git
+
+apt list --installed
+apt list --installed | grep docker
+apt list --upgradable
+
+sudo apt remove htop
+sudo apt purge htop
+
+sudo apt autoremove
+sudo apt autoclean
+
+# --- brew (macOS and Linux) ---
+
+brew search &lt;pattern&gt;
+brew search htop
+
+brew info htop
+brew desc htop
+brew cat htop
+
+
+brew install &lt;formula&gt;
+brew install htop tree
+
+brew install --cask &lt;cask-name: GUI apps&gt;
+brew install --cask visual-studio-code
+
+brew list
+
+brew outdated
+
+# --- snap ---
+
+snap list
+snap find nextcloud
+snap info nextcloud
+sudo snap install nextcloud --classic
+sudo snap refresh
+sudo snap refresh --hold=48h nextcloud
+snap refresh --time
+
+sudo snap revert nextcloud
+
+### ============================================
+### DISK, PARTITIONS, SMART, LUKS &amp; NFS
+### ============================================
+
+lsblk          # LiSt BLocK devices
+lsblk -f       # with filesystem info
+lsblk -o NAME,SIZE,TYPE,MOUNTPOINT,MODEL
+
+man fdisk
+sudo fdisk -l
+sudo fdisk /dev/nvme0n1
+
+cat /etc/fstab
+
+
+
+# SMART MONITORING TOOLS (smartmontools) ==============
+
+sudo smartctl -h              # help info 
+sudo smartctl -H /dev/&lt;sdb&gt;   # H for health; quick health check, first cmd for new drive
+sudo smartctl -a /dev/sdb        # full info + SATA speed
+sudo smartctl -t long /dev/sdb   # long self-test (1-3h)
+sudo smartctl -t short /dev/sdb
+# SMART MONITORING TOOLS (smartmontools) ==============
+
+
+
+# unencrypt
+sudo cryptsetup open --type luks /dev/sdb ironwolf
+
+
+
+# NFS
+cat /etc/exports
+sudo exportfs -a   # apply changes to /etc/exports file 
+sudo exportfs -s   # check; show applied changes/configuration
+
+sudo systemctl restart nfs-kernel-server
+
+
+# Mount / bind / NFS client (macOS example)
+
+sudo mount /dev/sdX1 /data # simple mount
+
+sudo mount /dev/mapper/ironwolf /data/ # after unencryption
+sudo mount --bind /data/Files/Media/ /srv/nfs/media/ 
+
+sudo umount /data
+
+sudo mount --move /old/mount /new/mount
+
+sudo mkdir -p /Volumes/nfs-media
+sudo mount -t nfs -o resvport,vers=4,ro 192.168.X.XX:/srv/nfs/media /Volumes/nfs-media
+
+
+
+### ============================================
+### NETWORKING &amp; DOWNLOAD
+### ============================================
+
+ip a
+ip -o a       # non-verbose
+ip addr show
+
+networkctl
+networkctl list
+
+nettop # macOS
+
+ping google.com
+ping -c 4 8.8.8.8
+ping 192.168.X.X
+
+curl https://example.com
+curl -I https://example.com      # fetch headers only (HTTP FTP FILE)
+curl -O https://example.com/file.tar.gz # Output; Download w/ existing name
+curl -o myfile.tar.gz https://example.com/file.tar.gz # output to a new file-name
+
+wget https://example.com/file.iso 
+
+ss -tuln
+ss -tun
+
+ethtool eno0
+ethtool eno0 | grep -E &quot;Speed|Link detected&quot;
+
+nmcli device status
+
+### ============================================
+### macOS SPECIFIC
+### ============================================
+
+open .
+open &lt;file&gt;   # with defualt program
+open -a &lt;application-name&gt;        # open macOS app
+open -a &lt;application-name&gt; &lt;file&gt; # open w/ custom program
+
+caffeinate -d &amp;         # do not turn off display; in the bg
+caffeinate -u -t 3600
+
+ifconfig -a
+ipconfig getifaddr en0
+
+pbcopy &lt; file.txt
+pbpaste &gt; newfile.txt
+
+open .
+open file.txt
+open -a &lt;application&gt; [file]
+
+# VS CODE
+
+code 
+code .
+code file.txt
+
+### ============================================
+### SCRIPTING, VARIABLES, LOOPS &amp; TESTS
+### ============================================
+
+# Variables
+name=&quot;&lt;user&gt;&quot;
+echo $name
+echo &quot;${name}&quot;
+echo &quot;$name is learning DevOps&quot;
+count=5
+
+# Loops
+for i in {1..10}; do echo $i; done
+for file in *.txt; do echo &quot;Processing $file&quot;; done
+while read line; do echo &quot;$line&quot;; done &lt; file.txt
+
+# Prefer `[[ ]]` over `test` or single `[` for safety in modern bash.
+
+# String comparison (use [[ ]] )
+[[ &quot;$str1&quot; == &quot;$str2&quot; ]] &amp;&amp; echo &quot;Equal&quot;
+[[ &quot;$str1&quot; != &quot;$str2&quot; ]] &amp;&amp; echo &quot;Not equal&quot;
+[[ -z &quot;$name&quot; ]] &amp;&amp; echo &quot;Empty string&quot;
+[[ -n &quot;$name&quot; ]] &amp;&amp; echo &quot;Not empty&quot;
+
+# Numeric comparison
+[[ $count -eq 5 ]] &amp;&amp; echo &quot;Equal to 5&quot;
+[[ $count -gt 3 ]] &amp;&amp; echo &quot;Greater than 3&quot;
+[[ $count -lt 10 ]] &amp;&amp; echo &quot;Less than 10&quot;
+
+# File tests
+[[ -f file.txt ]] &amp;&amp; echo &quot;Regular file exists&quot;
+[[ -d /data ]] &amp;&amp; echo &quot;Directory exists&quot;
+[[ -x script.sh ]] &amp;&amp; echo &quot;Executable&quot;
+[[ -r file.txt ]] &amp;&amp; echo &quot;Readable by curr. user&quot;
+[[ -s file.txt ]] &amp;&amp; echo &quot;File exists and not empty&quot;
+
+test -f file.txt &amp;&amp; echo &quot;exists&quot;
+
+# Special variables
+echo $0     # script name
+echo $1     # first argument
+echo $?     # exit code of last command
+echo $     # current PID
+
+echo $USER
+echo $HOME
+echo $PATH
+
+# Functions (basic)
+greet() {
+    echo &quot;Hello, $1!&quot;
+}
+greet &quot;DevOps Engineer&quot;
+
+### ============================================
+### ARCHIVING (tarball)
+### ============================================
+
+# general  cerate syntax
+tar -czvf $HOME/archive.tar.gz folder/to/be/archived # save to $HOME dir.
+watch -n 2 du -sh ./*   # watch live; esp. large files
+
+# Create
+COPYFILE_DISABLE=1 tar -czvf backup.tar.gz folder/  # macOS friendly
+tar -czvf backup.tar.gz folder/
+tar -cvf backup.tar folder/       # no compress / -z
+# -c create, -z compress w/ gzip, -v verbose, -f file-name
+# -f must be last bc of value/file-name
+
+# Extract
+tar -xzvf backup.tar.gz           # default save to current dir
+tar -xvf backup.tar -C /target/directory
+
+# List contents
+tar -tzvf backup.tar.gz
+
+### ============================================
+### REDIRECTION, PIPES, HEREDOC
+### ============================================
+
+echo &quot;Line 1&quot; &gt; file.txt
+echo &quot;Line 2&quot; &gt;&gt; file.txt
+
+ls /etc &gt; stdout.txt 2&gt; stderr.txt
+ls /nonexistent &amp;&gt; all.txt
+
+command 2&gt; /dev/null   # stderr
+command &amp;&gt; /dev/null   # all
+
+cat &gt; script.sh &lt;&lt;&#39;EOF&#39;
+#!/bin/bash
+echo &quot;Hello from heredoc&quot;
+echo &quot;User: $USER&quot;
+EOF
+
+cat &gt;&gt; file.txt &lt;&lt;EOF
+Appended line
+EOF
+
+# Pipe
+cat file.txt | grep &quot;foo&quot; | wc -l
+ls /etc | tee listing.txt | head -5
+
+\(ENTER)
+ducker run -d \(ENTER) # btw \ and (ENTER) there should be no slash
+
+
+### ============================================
+### Text Editors
+### ============================================
+
+vi 
+
+vim &lt;file&gt;
+vim &lt;new-file-name&gt;
+vim .
+vim path/to/location
+
+vimtutor
+
+&lt;cmd&gt; | vim -    # read in vim
+
+# VIM COMMANDS
+
+:%s/old_word/new_word/gc # c: asks for confirnation
+
+
+### ============================================
+### TMUX
+### ============================================
+
+tmux
+tmux ls
+tmux attach | a [-t] # -t for target
+
+exit   # detach and close tmux session
+
+#============ CTRL+B ============
+CTRL + B
+
+%     # vertical pane
+\&quot;    # horizontal pane
+
+arrows # navigate panes 
+
+D     # detach
+CTRL + D   # close pane
+
+C     # New Window
+
+0     # Change Window to 0 (Bottom line * changes)
+1 
+...
+
+Q &lt;number to switch to&gt;   # show tmux window numbers and jump
+
+o   # cycle through
+
+,   # change name of window
+
+w   # Show all windows and sessions
+
+ALT + &lt;1 | 2 | 3 | 4&gt;
+
+x   # kill split y/n
+
+[   # enter scroll mode, press &quot;q&quot; to exit
+
+:movew -t 5   # move window to number 5
+
+tmux kill-window -t &lt;window_number&gt; # kill window
+
+&amp; # kill current window, prompts y/n
+w &lt;select&gt; x # kill specified window, promtps y/n
+
+p   # previous window
+n   # next window
+
+#============ CTRL+B ============
+
+
+
+### ============================================
+### CTRL/ALT
+### ============================================
+
+Ctrl + C
+
+Ctrl + A
+Ctrl + E
+
+Ctrl + L | clear
+
+Ctrl + W
+Ctrl + U
+Ctrl + K
+
+Ctrl + R
+
+Ctrl + P
+Ctrl + N
+
+Ctrl + B     # Move cursor back one character (same as Left Arrow)
+Ctrl + F     # Move cursor forward one character (same as Right Arrow)
+
+Alt + B | Alt + leftArrow      # Move back one word (or Esc then B) 
+Alt + F | Alt + rightArrow     # Move forward one word (or Esc then F)
+
+Ctrl + H     # Delete character before cursor (same as Backspace)
+Ctrl + D     # Delete character under cursor (if line not empty)
+
+Ctrl + Y     # Paste the most recently cut text
+Alt + D      # Cut the word after the cursor
+
+
+### ============================================
+### SYSTEMD/systemctl, logs
+### ============================================
+
+systemctl [status | show | start | stop | restart | enable | disable]
+systemctl status # summary of the systemd system state
+systemctl status ssh
+systemctl status nfs-server
+
+sudo systemctl start ssh
+sudo systemctl stop ssh
+sudo systemctl restart ssh
+sudo systemctl restart nfs-server
+sudo systemctl reload ssh
+
+sudo systemctl enable ssh
+sudo systemctl enable --now docker
+
+sudo systemctl disable ssh
+
+systemctl reboot 
+
+journalctl
+
+journalctl -f
+journalctl -f --since &quot;1 hour ago&quot;
+journalctl -f --since &quot;15 min ago&quot;
+
+journalctl -b                     # current boot
+journalctl -b -1                  # previous boot
+journalctl -p err -xe
+
+
+
+### ============================================
+### MISC &amp; USEFUL FILE LOCATIONS
+### ============================================
+
+watch -n 2 free -h
+watch -n 1 df -h
+watch -n 5 &quot;ss -tuln | grep :80&quot;
+
+cmatrix
+cmatrix -h # help/commands
+cmatrix -m # lambda mode
+cmatrix -C [blue | red | green | magenta | white | black | yellow | cyan]
+cmatrix -m -C yellow
+
+tailscale -h
+tailscale status 
+tailscale status -h
+
+locate nginx.conf
+
+sudo updatedb
+
+ln -s /target/path linkname
+ln -sf /target/path linkname     # force
+
+source ~/.bashrc
+
+eval &quot;$(/opt/homebrew/bin/brew shellenv)&quot;
+
+
+
+# important locations, file paths
+
+/etc/passwd # User account information.
+
+~/.ssh/
+~/.ssh/config
+~/.ssh/id_ed25519_github
+~/.ssh/id_ed25519_github.pub
+
+/etc/fstab
+
+#nfs-kernel-server 
+/etc/exports
+/etc/nfs.conf
+
+/etc/os-release
+
+#grub
+/etc/default/grub
+
+/var/log/syslog (or journalctl)
+
+</code></pre>
+<p>Version 5</p>
+<hr>
+<p><strong>End of organized cheat sheet.</strong>  </p>
+
+      </div>
+    </article>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

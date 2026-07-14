@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S.M.A.R.T. Monitoring Tools - Osman Sarper Kucuk</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .post-content h2,
+    .post-content h3,
+    .post-content h4,
+    .post-content h5,
+    .post-content h6 {
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .post-content h2 { font-size: 1.5rem; }
+    .post-content h3 { font-size: 1.3rem; }
+    .post-content p { margin-bottom: 1.75rem; }
+    .post-content ul,
+    .post-content ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .post-content li {
+      margin-bottom: 0.5rem;
+    }
+    .post-content blockquote {
+      border-left: 3px solid #444;
+      padding-left: 1rem;
+      margin-bottom: 1.75rem;
+      color: #aaa;
+    }
+    .post-content pre {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin-bottom: 1.75rem;
+    }
+    .post-content code {
+      background: #1a1a1a;
+      padding: 0.15rem 0.3rem;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .post-content pre code {
+      padding: 0;
+      background: none;
+    }
+    .post-content hr {
+      margin: 2.5rem 0;
+      border: 0;
+      height: 1px;
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="/">Osman Sarper Kucuk</a></h1>
+    <nav>
+      <a href="/posts">Posts</a> ·
+      <a href="/links">Links</a>
+    </nav>
+  </header>
+
+  <hr />
+
+  <main>
+    <article class="post">
+      <h3>S.M.A.R.T. Monitoring Tools</h3>
+      <p class="post-meta">
+        <span class="date">July 13, 2026</span>
+      </p>
+      <hr />
+      <div class="post-content">
+        <h3>Intro</h3>
+<p>S.M.A.R.T. stands for Self-Monitoring, Analysis and Reporting Technology System. </p>
+<p>Wordy bunch. However; very useful. </p>
+<p>SMART is built into most modern disks; ATA/SATA, SCSI/SAS and NVMe disks <a href="https://github.com/smartmontools/smartmontools/tree/main">[ 1 ]</a>. &quot;SMART Monitoring Tools&quot; is a Debian/Ubuntu-apt package that contains two programs:</p>
+<ul>
+<li>smartctl (Control and Monitor Utility for SMART Disks)</li>
+<li>smartd (SMART Disk Monitoring Daemon)</li>
+</ul>
+<p>This blog will focus on &quot;smartctl&quot;.</p>
+<h3>Why Useful?</h3>
+<p>I first came across SMART data during my second hand HDD search and had to use immediately after my purchase.</p>
+<p>If you were to look at second hand listings for HDD or SSD drives you will come across SMART metrics one way another, most of the time via &quot;Hard Disk Sentinel&quot; or similar apps on MS Windows. </p>
+<p>I happened to found a &quot;NAS level&quot; HDD in package (not opened), and it was relatively well priced so I went with it. Unfortunately when I put the drive to test on my machine; I could not get it to do any simple thing, even though &quot;lsblk&quot; command showed that it actually existed. </p>
+<p>After a bit of research came across SMART and smartmontools package of Debian/Ubuntu APT. I will not forget the first simple command I ran which immediately told me everything I needed to know:</p>
+<pre><code class="language-bash">smartctl -H /dev/sdb   # -H for quick health info
+</code></pre>
+<p>Response: </p>
+<pre><code>=== START OF READ SMART DATA SECTION ===
+SMART overall-health self-assessment test result: FAILED!
+Drive failure expected in less than 24 hours. SAVE ALL DATA.
+No failed Attributes found.
+</code></pre>
+<p>Oouupsie. Drive failure? This was a quick test; I immediately wanted to know about the details.</p>
+<h3>Drive Failure? Whaaat?</h3>
+<p>Second most useful command after a quick check:</p>
+<pre><code class="language-bash">sudo smartctl -a /dev/sdb   # full info (SATA speed included)
+</code></pre>
+<p>Response:</p>
+<pre><code>=== START OF INFORMATION SECTION ===
+
+Device Model:     HUH728080ALE601
+Serial Number:    VJGLR55X
+LU WWN Device Id: 5 000cca 261c881e4
+Firmware Version: A4GL0003
+User Capacity:    8,001,563,222,016 bytes [8.00 TB]
+Sector Sizes:     512 bytes logical, 4096 bytes physical
+Rotation Rate:    7200 rpm
+Form Factor:      3.5 inches
+Device is:        Not in smartctl database 7.3/6131
+ATA Version is:   ACS-2, ATA8-ACS T13/1699-D revision 4
+SATA Version is:  SATA 3.1, 6.0 Gb/s (current: 6.0 Gb/s)
+Local Time is:    Sat May  2 16:19:22 2026 +03
+SMART support is: Available - device has SMART capability.
+SMART support is: Enabled
+AAM feature is:   Unavailable
+APM feature is:   Disabled
+Rd look-ahead is: Enabled
+Write cache is:   Enabled
+DSN feature is:   Unavailable
+ATA Security is:  Disabled, NOT FROZEN [SEC1], Master PW ID: 0xfffd
+Write SCT (Get) Feature Control Command failed: scsi error medium or hardware error (serious)
+Wt Cache Reorder: Unknown (SCT Feature Control command failed)
+
+Read SMART Thresholds failed: scsi error medium or hardware error (serious)
+
+...
+</code></pre>
+<p>Logs then go on and on for a couple of pages.</p>
+<p>I do not know how many times I read: &quot;scsi error medium or hardware error (serious)&quot;</p>
+<p>Suffice to say the deal was off for me, I wanted my money back immediately. Second hand web-sites usually have a grace period. That time is very valuable because you can test the device, if not performant or at agreed specs, can return it back and get the money back. The grace period was gone!</p>
+<p>Hopefully though; I got the funds back. Whew. That was close.</p>
+<h3>On to new adventures</h3>
+<p>I did managed get another nice deal on a Seagate Ironwolf NAS branded disk. Half the price. Bought it, immediately ran the tests and yesss! Deal closed! Very happy with the disk! </p>
+<p>Might get phenomenal deals on second hand electronics. </p>
+<p>For disks, you know what to do.</p>
+<h3>References</h3>
+<p>[1] <a href="https://github.com/smartmontools/smartmontools/tree/main">https://github.com/smartmontools/smartmontools/tree/main</a></p>
+
+      </div>
+    </article>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

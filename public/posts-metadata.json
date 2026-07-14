@@ -1,5 +1,19 @@
 [
   {
+    "slug": "06-smart-monitoring-tools",
+    "title": "S.M.A.R.T. Monitoring Tools",
+    "date": "2026-07-13",
+    "author": "Osman Sarper Kucuk",
+    "excerpt": "Intro\n\nS.M.A.R.T. stands for Self-Monitoring, Analysis and Reporting Technology System. \n\nWordy bunch. However; very useful. \n\nSMART is built into mos..."
+  },
+  {
+    "slug": "05-grand-linux-command-cheat-sheet",
+    "title": "Grand Linux Command Cheat Sheet",
+    "date": "2026-07-08",
+    "author": "Osman Sarper Kucuk",
+    "excerpt": "bash\n\n ============================================\n USEFUL IN WIDE RANGE\n ============================================\n\n<cmd> -h\n<cmd> --help\n<cmd> <..."
+  },
+  {
     "slug": "04-network-file-share-setup",
     "title": "Network File Share (NFS) Setup",
     "date": "2026-06-25",
