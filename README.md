@@ -59,11 +59,19 @@ npm run preview
 ## Deployment (Google Cloud App Engine)
 
 Install Google Cloud SDK if not already installed
-Authenticate and set your project:
 
 ```bash
+
+# Authenticate and set your project:
 gcloud auth login
 gcloud config set project YOUR_PROJECT_ID
+
+```
+
+After logged in and project set:
+
+
+```bash
 
 #clear dist/ folder
 rm -rf ./dist
