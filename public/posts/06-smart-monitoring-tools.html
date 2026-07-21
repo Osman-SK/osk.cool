@@ -89,8 +89,14 @@
 <p>I first came across SMART data during my second hand HDD search and had to use immediately after my purchase.</p>
 <p>If you were to look at second hand listings for HDD or SSD drives you will come across SMART metrics one way another, most of the time via &quot;Hard Disk Sentinel&quot; or similar apps on MS Windows. </p>
 <p>I happened to found a &quot;NAS level&quot; HDD in package (not opened), and it was relatively well priced so I went with it. Unfortunately when I put the drive to test on my machine; I could not get it to do any simple thing, even though &quot;lsblk&quot; command showed that it actually existed. </p>
-<p>After a bit of research came across SMART and smartmontools package of Debian/Ubuntu APT. I will not forget the first simple command I ran which immediately told me everything I needed to know:</p>
-<pre><code class="language-bash">smartctl -H /dev/sdb   # -H for quick health info
+<p>After a bit of research came across SMART and smartmontools package of Debian/Ubuntu APT. Here is official commands for apt:</p>
+<pre><code class="language-bash">
+apt show smartmontools   # pack info
+
+sudo apt install smartmontools   # install from apt
+</code></pre>
+<p>I will not forget the first simple command I ran which immediately told me everything I needed to know:</p>
+<pre><code class="language-bash">sudo smartctl -H /dev/sdb   # -H for quick health info
 </code></pre>
 <p>Response: </p>
 <pre><code>=== START OF READ SMART DATA SECTION ===
@@ -137,7 +143,7 @@ Read SMART Thresholds failed: scsi error medium or hardware error (serious)
 <p>I do not know how many times I read: &quot;scsi error medium or hardware error (serious)&quot;</p>
 <p>Suffice to say the deal was off for me, I wanted my money back immediately. Second hand web-sites usually have a grace period. That time is very valuable because you can test the device, if not performant or at agreed specs, can return it back and get the money back. The grace period was gone!</p>
 <p>Hopefully though; I got the funds back. Whew. That was close.</p>
-<h3>On to new adventures</h3>
+<h3>On to New Adventures</h3>
 <p>I did managed get another nice deal on a Seagate Ironwolf NAS branded disk. Half the price. Bought it, immediately ran the tests and yesss! Deal closed! Very happy with the disk! </p>
 <p>Might get phenomenal deals on second hand electronics. </p>
 <p>For disks, you know what to do.</p>

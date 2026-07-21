@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S.M.A.R.T. Monitoring Tools Part 2: Advanced Practical Metrics - Osman Sarper Kucuk</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .post-content h2,
+    .post-content h3,
+    .post-content h4,
+    .post-content h5,
+    .post-content h6 {
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .post-content h2 { font-size: 1.5rem; }
+    .post-content h3 { font-size: 1.3rem; }
+    .post-content p { margin-bottom: 1.75rem; }
+    .post-content ul,
+    .post-content ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .post-content li {
+      margin-bottom: 0.5rem;
+    }
+    .post-content blockquote {
+      border-left: 3px solid #444;
+      padding-left: 1rem;
+      margin-bottom: 1.75rem;
+      color: #aaa;
+    }
+    .post-content pre {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin-bottom: 1.75rem;
+    }
+    .post-content code {
+      background: #1a1a1a;
+      padding: 0.15rem 0.3rem;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .post-content pre code {
+      padding: 0;
+      background: none;
+    }
+    .post-content hr {
+      margin: 2.5rem 0;
+      border: 0;
+      height: 1px;
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="/">Osman Sarper Kucuk</a></h1>
+    <nav>
+      <a href="/posts">Posts</a> ·
+      <a href="/links">Links</a>
+    </nav>
+  </header>
+
+  <hr />
+
+  <main>
+    <article class="post">
+      <h3>S.M.A.R.T. Monitoring Tools Part 2: Advanced Practical Metrics</h3>
+      <p class="post-meta">
+        <span class="date">July 18, 2026</span>
+      </p>
+      <hr />
+      <div class="post-content">
+        <h3>Intro</h3>
+<p>There are a couple of very useful and practical metrics from SMART logs that you should be aware of. These metrics shine a light on how much a disk is used and consequently tells how much more usage is expected before the disk at question might fail.</p>
+<p>We should also note that there is no perfect disk, all disks, whether designed for enterprise or home-use expected to fail at some point in the future. Regardless, the metrics we will discuss will help us determine the overall health in a more precise way than covered in the previous section <a href="https://osk.cool/posts/06-smart-monitoring-tools.html"> [ 1 ]. </a></p>
+<h3>The SMART Logs in Detail</h3>
+<p>When we run:</p>
+<pre><code class="language-bash">sudo smartctl -a /dev/sdb   # or any other disk
+</code></pre>
+<p>we are bombarded with lots of logs. If we do not know what to look for in general, it is easy to get lost.</p>
+<p>Lets get an overall picture first, once we ran the command: </p>
+<ol>
+<li>INFORMATION SECTION</li>
+<li>READ SMART DATA SECTION</li>
+</ol>
+<h3>1- INFORMATION SECTION:</h3>
+<p>From the information section we get something like:</p>
+<pre><code>
+=== START OF INFORMATION SECTION ===
+
+Model Family:     Seagate IronWolf
+Device Model:     ST8000VN0022-2EL112
+User Capacity:    8,001,563,222,016 bytes [8.00 TB]
+SATA Version is:  SATA 3.1, 6.0 Gb/s (current: 6.0 Gb/s)
+
+...
+</code></pre>
+<p>This section is about identification, capacity and capability of the drive in question, lets quickly go over them:</p>
+<p>Family and Device model: is a quick check on whether we are looking at a disk we wanted; if you bought a second hand disk for example, this will tell whether the device is the same brand and model as advertised. Furthermore; from this information you can further do a search on these types of disks. Eg. their overall reliability; MTBF (mean hours to failure) etc.</p>
+<p>Capacity is capacity,</p>
+<p>SATA Version: Another useful info is whether the device is at a right SATA port on motherboard. Especially old PCs might have ports less than 6.0 Gb/s, say 3.0, </p>
+<p>And if your device is capable of handling 6.0 Gb/s and depending on your use case, you might be losing speed because it is connected at a wrong port. This information is a good place to check.</p>
+<h3>2- READ SMART DATA SECTION:</h3>
+<p>Under this section, there is a table called: Vendor Specific SMART Attributes with Thresholds.</p>
+<p>This is the crux of health assessment.</p>
+<p>At first glance there are lots of columns (example table shows less for legibility), we shall focus on the most important columns:</p>
+<ul>
+<li>TYPE</li>
+<li>RAW_VALUE</li>
+</ul>
+<pre><code>
+Vendor Specific SMART Attributes with Thresholds:
+
+ID# ATTRIBUTE_NAME            TYPE      UPDATED  WHEN_FAILED RAW_VALUE
+
+  5 Reallocated_Sector_Ct     Pre-fail  Always       -       0
+
+  9 Power_On_Hours            Old_age   Always       -       27734
+
+ 12 Power_Cycle_Count         Old_age   Always       -       730
+
+187 Reported_Uncorrect        Old_age   Always       -       0
+
+188 Command_Timeout           Old_age   Always       -       19557 19564 65535
+
+190 Airflow_Temperature_Cel   Old_age   Always   In_the_past 43 (Min/Max 36/45 #9049)
+
+194 Temperature_Celsius       Old_age   Always       -       43 (0 9 0 0 0)
+
+197 Current_Pending_Sector    Old_age   Always       -       0
+
+198 Offline_Uncorrectable     Old_age   Offline      -       0
+
+199 UDMA_CRC_Error_Count      Old_age   Always       -       15637058
+
+241 Total_LBAs_Written        Old_age   Offline      -       199823481677
+</code></pre>
+<p>TYPE column gives a quick &quot;urgency&quot; for the metric in question:</p>
+<p>Pre-fail
+Old_age
+etc.</p>
+<p>RAW_VALUE gives the specific data for the metric.</p>
+<p>And lastly the metrics: </p>
+<ul>
+<li>#9 Power_On_Hours </li>
+<li>#241 Total_LBAs_Written</li>
+</ul>
+<p> </p>
+<p>Please note that these metrics are not the whole story but still gives a quick idea.</p>
+<h3>#9 Power On Hours</h3>
+<p>This one simply shows how many hours the drive was up. Judge by yourself per table below:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Drive Type</th>
+<th align="left">Typical &quot;Comfortable&quot; Range</th>
+<th align="left">Notes / Real-World Data</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><br>Typical Desktop / Consumer (Barracuda, WD Blue, etc.)<br></td>
+<td align="left"><br>Up to 15,000–25,000 hours (~2–3 years)<br></td>
+<td align="left"><br>Not designed for 24/7. One 2026 study of failed drives showed median ~8,700 hours. In desktop (non-24/7) use they often last longer. <br></td>
+</tr>
+<tr>
+<td align="left"><br>NAS disks (IronWolf, WD Red Plus/Pro, Toshiba N300)<br></td>
+<td align="left"><br>30,000–60,000+ hours (3.5–7+ years)<br></td>
+<td align="left"><br>Rated for 24/7. Backblaze sees many running reliably at 4–7 year average ages with low failure rates.<br></td>
+</tr>
+<tr>
+<td align="left"><br>High-quality Enterprise (Seagate Exos, WD Ultrastar/Gold, Toshiba MG series)<br></td>
+<td align="left"><br>50,000–80,000+ hours (6–9+ years)<br></td>
+<td align="left"><br>Built for datacenters (MTBF 2–2.5 million hours). Backblaze fleet has many models averaging 5–7+ years old with stable ~1.3% AFR. Newer high-capacity models often perform even better.<br></td>
+</tr>
+</tbody></table>
+<h3>#241 Total_LBAs_Written</h3>
+<p>Tracks the total number of Logical Block Addresses (sectors) written which in turn will give us the TeraBytes written value,</p>
+<p>typically counted in 512-byte sectors so the calc goes:</p>
+<p>TB written ≈ (RAW_VALUE × 512) / 1,000,000,000,000 </p>
+<p>In the example:</p>
+<p>199823481677 x 512 / 1,000,000,000,000 = 102.31 TBs Written to disk.</p>
+<table>
+<thead>
+<tr>
+<th>Drive Type</th>
+<th>Annual Workload Rating</th>
+<th>Typical 5-Year Total Writes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><br>NAS disks – Standard (IronWolf, WD Red Plus, Toshiba N300)<br></td>
+<td><br>180 TB/year<br></td>
+<td><br>~900 TB<br></td>
+</tr>
+<tr>
+<td><br>NAS disks – Pro (IronWolf Pro, WD Red Pro)<br></td>
+<td><br>300–550 TB/year<br></td>
+<td><br>1,500–2,750 TB<br></td>
+</tr>
+<tr>
+<td><br>High-quality Enterprise (Seagate Exos, WD Ultrastar/Gold)<br></td>
+<td><br>550 TB/year<br></td>
+<td><br>~2,750 TB<br></td>
+</tr>
+</tbody></table>
+<h3>Other Attributes</h3>
+<ul>
+<li><p>12 Power_Cycle_Count: How many times the drive was powered on/off.</p>
+</li>
+<li><p>194 Temperature_Celsius: Keep HDDs under ~50 °C sustained.</p>
+</li>
+<li><p>For SSDs: Wear-leveling / Media Wearout indicators, spare block counts.</p>
+</li>
+</ul>
+<p>Other important / critical attributes to watch (RAW_VALUE ideally stays at 0 for below):</p>
+<ul>
+<li>5 Reallocated_Sector_Ct: Sectors remapped to spares. Growth = dying drive (especially HDDs).</li>
+<li>197 Current_Pending_Sector: Unstable sectors waiting to be reallocated. Data is at risk.</li>
+<li>198 Offline_Uncorrectable: Sectors that failed even offline scans.</li>
+<li>187 Reported_Uncorrect: Uncorrectable errors reported to the OS.</li>
+<li>188 Command_Timeout: Often points to power or cabling issues.</li>
+<li>199 UDMA_CRC_Error_Count: SATA communication errors (bad cable/port).</li>
+</ul>
+<h3>Quick Summary – What Should Concern You?</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Desktop</th>
+<th>NAS (Standard)</th>
+<th>NAS Pro / Enterprise</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Power On Hours</td>
+<td>&gt;25k hours</td>
+<td>&gt;50–60k hours</td>
+<td>&gt;70–80k hours</td>
+</tr>
+<tr>
+<td>Annual Writes (HDD)</td>
+<td>N/A</td>
+<td>&gt;180 TB/yr</td>
+<td>&gt;550 TB/yr</td>
+</tr>
+</tbody></table>
+<p>Critical SMART attributes: #5, #197, #198, #187 — these are the real early warnings</p>
+<h3>References:</h3>
+<p>Part of the research, Tables, and Reference organization made with Grok/AI. Overall; unless explicitly stated, no AI used in articles.</p>
+<p>[1] Previous SMART introductory article <a href="https://osk.cool/posts/06-smart-monitoring-tools.html">https://osk.cool/posts/06-smart-monitoring-tools.html</a></p>
+<p>Others:</p>
+<ul>
+<li><p>smartmontools Official Website <a href="https://www.smartmontools.org/">https://www.smartmontools.org/</a></p>
+</li>
+<li><p>Linuxize – smartctl Command in Linux (Best practical guide to output sections) <a href="https://linuxize.com/post/smartctl-command-in-linux/%5D(https://linuxize.com/post/smartctl-command-in-linux/)">https://linuxize.com/post/smartctl-command-in-linux/](https://linuxize.com/post/smartctl-command-in-linux/)</a></p>
+</li>
+<li><p>Backblaze Drive Stats for 2025 (Latest annual reliability report) <a href="https://www.backblaze.com/blog/backblaze-drive-stats-for-2025/">https://www.backblaze.com/blog/backblaze-drive-stats-for-2025/</a></p>
+</li>
+<li><p>Backblaze – Are Hard Drives Getting Better? (Bathtub Curve analysis) <a href="https://www.backblaze.com/blog/are-hard-drives-getting-better-lets-revisit-the-bathtub-curve/">https://www.backblaze.com/blog/are-hard-drives-getting-better-lets-revisit-the-bathtub-curve/</a></p>
+</li>
+<li><p>raidsize.com NAS &amp; Enterprise Drive Database (Workload ratings + real-world AFR) <a href="https://raidsize.com/drives/en">https://raidsize.com/drives/en</a></p>
+</li>
+<li><p>Backblaze – How Long Do Hard Drives Last? <a href="https://www.backblaze.com/blog/hard-drive-life-expectancy/">https://www.backblaze.com/blog/hard-drive-life-expectancy/</a></p>
+</li>
+<li><p>SecureDataRecovery – How Long Do Hard Drives Last? (2026 Edition) <a href="https://www.securedatarecovery.com/blog/how-long-do-hard-drives-last-2026">https://www.securedatarecovery.com/blog/how-long-do-hard-drives-last-2026</a></p>
+</li>
+<li><p>Architecting IT – Hard Drive Workload Rate Limits Explained <a href="https://www.architecting.it/blog/when-did-hard-drives-get-workload-rate-limits/">https://www.architecting.it/blog/when-did-hard-drives-get-workload-rate-limits/</a></p>
+</li>
+<li><p>Ask Ubuntu – Calculating TBW from SMART attribute 241 <a href="https://askubuntu.com/questions/1290005/how-can-i-monitor-the-tbw-on-my-samsung-ssd">https://askubuntu.com/questions/1290005/how-can-i-monitor-the-tbw-on-my-samsung-ssd</a></p>
+</li>
+<li><p>smartmontools GitHub Repository (Official source code) <a href="https://github.com/smartmontools/smartmontools/">https://github.com/smartmontools/smartmontools/</a></p>
+</li>
+</ul>
+
+      </div>
+    </article>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

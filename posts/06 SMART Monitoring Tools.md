@@ -27,10 +27,20 @@ If you were to look at second hand listings for HDD or SSD drives you will come 
 
 I happened to found a "NAS level" HDD in package (not opened), and it was relatively well priced so I went with it. Unfortunately when I put the drive to test on my machine; I could not get it to do any simple thing, even though "lsblk" command showed that it actually existed. 
 
-After a bit of research came across SMART and smartmontools package of Debian/Ubuntu APT. I will not forget the first simple command I ran which immediately told me everything I needed to know:
+After a bit of research came across SMART and smartmontools package of Debian/Ubuntu APT. Here is official commands for apt:
 
 ```bash
-smartctl -H /dev/sdb   # -H for quick health info
+
+apt show smartmontools   # pack info
+
+sudo apt install smartmontools   # install from apt
+
+```
+
+I will not forget the first simple command I ran which immediately told me everything I needed to know:
+
+```bash
+sudo smartctl -H /dev/sdb   # -H for quick health info
 ```
 
 Response: 
@@ -93,7 +103,7 @@ Suffice to say the deal was off for me, I wanted my money back immediately. Seco
 
 Hopefully though; I got the funds back. Whew. That was close.
 
-### On to new adventures
+### On to New Adventures
 
 I did managed get another nice deal on a Seagate Ironwolf NAS branded disk. Half the price. Bought it, immediately ran the tests and yesss! Deal closed! Very happy with the disk! 
 
