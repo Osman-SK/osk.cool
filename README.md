@@ -71,10 +71,10 @@ After logged in and project set:
 
 
 ```bash
-#clear dist/ folder
+# clear dist/ folder
 rm -rf ./dist
 
-#build and deploy:
+# build and deploy:
 npm run build
 gcloud app deploy
 ```
