@@ -61,7 +61,6 @@ npm run preview
 Install Google Cloud SDK if not already installed
 
 ```bash
-
 # Authenticate and set your project:
 gcloud auth login
 gcloud config set project YOUR_PROJECT_ID
@@ -72,7 +71,6 @@ After logged in and project set:
 
 
 ```bash
-
 #clear dist/ folder
 rm -rf ./dist
 
