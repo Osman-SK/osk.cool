@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Blog Setup on Google Cloud Platform - Osman Sarper Kucuk</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .post-content h2,
+    .post-content h3,
+    .post-content h4,
+    .post-content h5,
+    .post-content h6 {
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .post-content h2 { font-size: 1.5rem; }
+    .post-content h3 { font-size: 1.3rem; }
+    .post-content p { margin-bottom: 1.75rem; }
+    .post-content ul,
+    .post-content ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .post-content li {
+      margin-bottom: 0.5rem;
+    }
+    .post-content blockquote {
+      border-left: 3px solid #444;
+      padding-left: 1rem;
+      margin-bottom: 1.75rem;
+      color: #aaa;
+    }
+    .post-content pre {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin-bottom: 1.75rem;
+    }
+    .post-content code {
+      background: #1a1a1a;
+      padding: 0.15rem 0.3rem;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .post-content pre code {
+      padding: 0;
+      background: none;
+    }
+    .post-content hr {
+      margin: 2.5rem 0;
+      border: 0;
+      height: 1px;
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="/">Osman Sarper Kucuk</a></h1>
+    <nav>
+      <a href="/posts">Posts</a> ·
+      <a href="/links">Links</a>
+    </nav>
+  </header>
+
+  <hr />
+
+  <main>
+    <article class="post">
+      <h3>My Blog Setup on Google Cloud Platform</h3>
+      <p class="post-meta">
+        <span class="date">August 3, 2026</span>
+      </p>
+      <hr />
+      <div class="post-content">
+        <h3>Intro</h3>
+<p>I have a very simple and efficient blog/website hosting setup on GCP (Google Cloud Platform). After trying different services, learning their pros and cons, I decided to settle for this one. </p>
+<p>More specifically I am using GCP App Engine service in a standard environment. Basically, you just upload your code and GCP handles the rest: scaling, load balancing, SSL etc. It is very simple and cost effective for simple blogs, websites or web apps.</p>
+<p>My website was inspired by Vegard Stikbakke&#39;s <a href="https://www.vegardstikbakke.com/">blog</a>; its minimalism and themes.</p>
+<p>The cost is less than a dollar a month.</p>
+<h3>GCP Side</h3>
+<p>GCP side is handled with a yaml file:</p>
+<p>First specify the the environment (standard or flexible) and runtime (Python, Java, Go, Node, PHP, Ruby etc.).</p>
+<p>You might also specify the website url handlers here.</p>
+<p>Here is how mine looks like:</p>
+<pre><code class="language-yaml">
+runtime: nodejs22
+env: standard
+
+handlers:
+
+  # Root URL (/)
+  - url: /
+    static_files: dist/index.html
+    upload: dist/index.html
+    secure: always
+  
+  # Posts listing page
+  - url: /posts
+    static_files: dist/posts.html
+    upload: dist/posts\.html$
+    secure: always
+
+  # Links page
+  - url: /links
+    static_files: dist/links.html
+    upload: dist/links.html
+    secure: always
+
+  # CSS and root-level static files
+  - url: /style\.css
+    static_files: dist/style.css
+    upload: dist/style\.css
+    secure: always
+    
+...
+</code></pre>
+<h3>Code: Typescript</h3>
+<p>I tried to maintain simplicity and just used Typescript. Vite was used as a build and development toolkit. That is about it.</p>
+<p>I used Kimi K2.6 on OpenCode for new features like markdown file import/integration.</p>
+<h3>Publishing Workflow</h3>
+<p>I write a post on a markdown file and then move it into a folder in the repository, a few commands handle the rest:</p>
+<pre><code class="language-bash">
+#1 
+move written-blog-post.md file into ./blogs/ 
+
+#2 clear previous build
+rm -rf ./dist
+
+#3 build
+npm run build
+
+# Optional; check up how it looks
+npm run dev
+
+#4 deploy
+gcloud app deploy   # requires google cloud cli
+</code></pre>
+<p>That is about it. </p>
+<p>I am sure it can be improved in various ways, but served me well for a while now, and I am very well used to it. The main point was simplicity and ease of operations anyway so I do not tinker with it too much.</p>
+<h3>References</h3>
+<p>The website code is open source on GitHub:</p>
+<p><a href="https://github.com/Osman-SK/osk.cool">github.com/Osman-SK/osk.cool</a></p>
+
+      </div>
+    </article>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

@@ -1,5 +1,12 @@
 [
   {
+    "slug": "09-my-hosting-setup-on-google-cloud-platform",
+    "title": "My Blog Setup on Google Cloud Platform",
+    "date": "2026-08-03",
+    "author": "Osman Sarper Kucuk",
+    "excerpt": "Intro\n\nI have a very simple and efficient blog/website hosting setup on GCP (Google Cloud Platform). After trying different services, learning their p..."
+  },
+  {
     "slug": "08-fun-little-cli-screensaver---cmatrix",
     "title": "Fun Little CLI Screensaver: cmatrix",
     "date": "2026-07-23",
