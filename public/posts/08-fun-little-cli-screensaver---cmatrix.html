@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fun Little CLI Screensaver: cmatrix - Osman Sarper Kucuk</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .post-content h2,
+    .post-content h3,
+    .post-content h4,
+    .post-content h5,
+    .post-content h6 {
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .post-content h2 { font-size: 1.5rem; }
+    .post-content h3 { font-size: 1.3rem; }
+    .post-content p { margin-bottom: 1.75rem; }
+    .post-content ul,
+    .post-content ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .post-content li {
+      margin-bottom: 0.5rem;
+    }
+    .post-content blockquote {
+      border-left: 3px solid #444;
+      padding-left: 1rem;
+      margin-bottom: 1.75rem;
+      color: #aaa;
+    }
+    .post-content pre {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin-bottom: 1.75rem;
+    }
+    .post-content code {
+      background: #1a1a1a;
+      padding: 0.15rem 0.3rem;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .post-content pre code {
+      padding: 0;
+      background: none;
+    }
+    .post-content hr {
+      margin: 2.5rem 0;
+      border: 0;
+      height: 1px;
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="/">Osman Sarper Kucuk</a></h1>
+    <nav>
+      <a href="/posts">Posts</a> ·
+      <a href="/links">Links</a>
+    </nav>
+  </header>
+
+  <hr />
+
+  <main>
+    <article class="post">
+      <h3>Fun Little CLI Screensaver: cmatrix</h3>
+      <p class="post-meta">
+        <span class="date">July 23, 2026</span>
+      </p>
+      <hr />
+      <div class="post-content">
+        <h3>Intro</h3>
+<p>cmatrix is a classic terminal program that recreates the iconic falling green characters from The Matrix.</p>
+<p>It’s lightweight, available in most Unix-like package managers, and perfect for a quick aesthetic break, a temporary screen cover, or just showing off a bit of terminal flair.</p>
+<h3>Install</h3>
+<pre><code>
+brew install cmatrix      # macOS
+
+sudo apt install cmatrix  # Debian/Ubuntu
+
+sudo dnf install cmatrix  # Fedora
+
+sudo pacman -S cmatrix    # Arch
+</code></pre>
+<h3>Basic usage and useful flags</h3>
+<pre><code>
+cmatrix      # classic green rain
+
+cmatrix -m   # lambda mode (every character becomes λ)
+
+cmatrix -a   # asynchronous mode (more organic feel)
+
+cmatrix -b   # occasional bold characters
+
+cmatrix -B   # all characters bold
+
+cmatrix -C blue   # change color (green, red, blue, yellow, cyan, magenta, white, black)
+
+cmatrix -s   # screensaver mode (exits on any keypress)
+
+cmatrix -mbC red   # can conbine options
+</code></pre>
+<h3>Interactive controls (while it’s running)</h3>
+<p>r -- rainbow mode</p>
+<p>a -- toggle asynchronous scroll</p>
+<p>b -- random bold characters</p>
+<p>B -- all bold</p>
+<p>n -- turn bold off</p>
+<p>0–9 -- change speed</p>
+<p>! @ # $ % ^ &amp; ) -- change color (red / green / yellow / blue / magenta / cyan / white / black)</p>
+<p>q or Ctrl+C -- quit</p>
+<p>Press above keys live (doesn’t work in -s mode)</p>
+<p>Have fun with the cmatrix.</p>
+
+      </div>
+    </article>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

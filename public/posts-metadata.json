@@ -1,5 +1,12 @@
 [
   {
+    "slug": "08-fun-little-cli-screensaver---cmatrix",
+    "title": "Fun Little CLI Screensaver: cmatrix",
+    "date": "2026-07-23",
+    "author": "Osman Sarper Kucuk",
+    "excerpt": "Intro\n\ncmatrix is a classic terminal program that recreates the iconic falling green characters from The Matrix.\n\nIt’s lightweight, available in most ..."
+  },
+  {
     "slug": "07-smart-monitoring-tools-part-2---advanced-practical-metrics",
     "title": "S.M.A.R.T. Monitoring Tools Part 2: Advanced Practical Metrics",
     "date": "2026-07-18",
