@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web3 Hardware Wallet Hack: A Postmortem and Improved Best Practices - Osman Sarper Kucuk</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .post-content h2,
+    .post-content h3,
+    .post-content h4,
+    .post-content h5,
+    .post-content h6 {
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .post-content h2 { font-size: 1.5rem; }
+    .post-content h3 { font-size: 1.3rem; }
+    .post-content p { margin-bottom: 1.75rem; }
+    .post-content ul,
+    .post-content ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .post-content li {
+      margin-bottom: 0.5rem;
+    }
+    .post-content blockquote {
+      border-left: 3px solid #444;
+      padding-left: 1rem;
+      margin-bottom: 1.75rem;
+      color: #aaa;
+    }
+    .post-content pre {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin-bottom: 1.75rem;
+    }
+    .post-content code {
+      background: #1a1a1a;
+      padding: 0.15rem 0.3rem;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .post-content pre code {
+      padding: 0;
+      background: none;
+    }
+    .post-content hr {
+      margin: 2.5rem 0;
+      border: 0;
+      height: 1px;
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="/">Osman Sarper Kucuk</a></h1>
+    <nav>
+      <a href="/posts">Posts</a> ·
+      <a href="/links">Links</a>
+    </nav>
+  </header>
+
+  <hr />
+
+  <main>
+    <article class="post">
+      <h3>Web3 Hardware Wallet Hack: A Postmortem and Improved Best Practices</h3>
+      <p class="post-meta">
+        <span class="date">August 9, 2026</span>
+      </p>
+      <hr />
+      <div class="post-content">
+        <h3>Intro</h3>
+<p>Web3/onchain users and institutions are used to software or social engineering hacks. A hardware wallet hack is new. Hardware wallets were supposed to be the epitome of web3 security. </p>
+<p>However, there was a recent hardware wallet (Cold Card) hack that made onchain users very fearful. To be absolutely clear: this is still a firmware/software hack due to randomness failures and yet, it did affect the hardware wallet holders.</p>
+<p>In general in the past, If you had an open source hardware wallet with dapp seperation: you had not need to worry about most hacks -- that I know of.  </p>
+<p>I wrote about the industry best practices in the past, see <a href="https://osk.cool/posts/02-web3-account-security-fundamentals.html">[ link: 1 ]</a>. </p>
+<h3>The Hack and Security Options Available</h3>
+<p>The crux of the problem was that the Cold Card random generator for web3 account creation (public and privite keys) was not really, ummmh; random!</p>
+<p>Hardware and software were supposed to work together, if web3 account creation is not random or in other words not-easily-guessable then attacker can mimic and guess account keys! Which brings us back to the software/firmware part again.</p>
+<p>So what is the solution? </p>
+<p>I still think that if you use open source hardware wallets that respect your privacy you are mostly good to go. I like Trezor. Others exist <a href="https://osk.cool/posts/02-web3-account-security-fundamentals.html">[ 1 ]</a>. </p>
+<p>I would stay far away from Ledger company and devices. They do not respect your privacy (data leaks, business model, aggressive tracking) and they are closed source. </p>
+<p>Do you research then pick a hardware wallet. </p>
+<p>Unfortunately, if you now want to protect against single open source hardware wallets
+solutions are getting more complicated -- since there is now a precedent that open source hardware wallet addresses might be hacked; you might want to be more secure.</p>
+<p>How? </p>
+<h3>Option 1: Multisig</h3>
+<p>Use multisig (multisignature). A rough equivalent might be 2 factor authentication. Basically not 1 but 2 private keys are needed for a transaction to go through. One of the best opsec (operational security) might be to used 2 different hardware wallets (eg. Trezor and Keystone).</p>
+<p>On Solana Squads Protocol is the king. On ethereum land, I hear Safe (formerly Gnosis Safe) is the industry standard/popular choice.</p>
+<h3>Option 2: Offline Signing</h3>
+<p>There are hardware devices that offer offline signing. It is possible to do it without hardware wallets (due to their account generation risks like Cold Card mentoned above).</p>
+<h3>Option 3: Not Mutually Exclusive</h3>
+<p>Option 1 and 2 are not mutually exclusive. You can use a multisig that is partly signed by a traditional hardware wallet, and partly signed by an offline signer (hardware wallet or otherwise).</p>
+<h3>Conclusion</h3>
+<p>Taking full responsibility for funds is the only way. In Crypto/Web3 land, securing the private key is your responsibility!</p>
+<p>And remember: if you do not have smart contract application seperation per address, your funds might still be stolen <a href="https://osk.cool/posts/02-web3-account-security-fundamentals.html">[ 1 ]</a>.</p>
+<p>Of course an attack vector might exist that we do not know yet, we can only increase security up to a point. Nothing eliminates all risk; but we can meaningfully reduce it!</p>
+<p>Happy (safe) onchain activities! </p>
+<h3>References:</h3>
+<p>Security best practices
+[1] <a href="https://osk.cool/posts/02-web3-account-security-fundamentals.html">https://osk.cool/posts/02-web3-account-security-fundamentals.html</a></p>
+<p>More on the hack:
+[2] <a href="https://unchainedcrypto.com/coldcard-firmware-flaw-lets-attacker-drain-594-bitcoin-from-users/">https://unchainedcrypto.com/coldcard-firmware-flaw-lets-attacker-drain-594-bitcoin-from-users/</a></p>
+<p>More Technical:
+[3] <a href="https://engineering.block.xyz/blog/predictable-rng-fallback-and-32-bit-reseed-in-coldcard-firmware">https://engineering.block.xyz/blog/predictable-rng-fallback-and-32-bit-reseed-in-coldcard-firmware</a></p>
+
+      </div>
+    </article>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

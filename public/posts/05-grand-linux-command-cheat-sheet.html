@@ -76,7 +76,8 @@
       </p>
       <hr />
       <div class="post-content">
-        <pre><code class="language-bash">
+        <h2>Quick Reference &amp; Practical Examples (All Topics)</h2>
+<pre><code class="language-bash">
 ### ============================================
 ### USEFUL IN WIDE RANGE
 ### ============================================
@@ -145,6 +146,10 @@ echo $SHELL          # default shell
 uptime
 
 date
+cal
+cal 2026
+cal -3
+
 timedatectl
 timedatectl -a       # show all properties
 timedatectl -h
@@ -777,6 +782,8 @@ vim &lt;new-file-name&gt;
 vim .
 vim path/to/location
 
+vim -M &lt;file&gt;    # strict read-only mode; no buffer or file edit allowed
+
 vimtutor
 
 &lt;cmd&gt; | vim -    # read in vim
@@ -785,6 +792,9 @@ vimtutor
 
 :%s/old_word/new_word/gc # c: asks for confirnation
 
+:set paste
+
+:nohlsearch
 
 ### ============================================
 ### TMUX
@@ -793,6 +803,7 @@ vimtutor
 tmux
 tmux ls
 tmux attach | a [-t] # -t for target
+tmux kill-session -t &lt;session_name_or_number&gt; 
 
 exit   # detach and close tmux session
 
@@ -962,7 +973,7 @@ eval &quot;$(/opt/homebrew/bin/brew shellenv)&quot;
 /var/log/syslog (or journalctl)
 
 </code></pre>
-<p>Version 5</p>
+<p>Version 6</p>
 <hr>
 <p><strong>End of organized cheat sheet.</strong>  </p>
 

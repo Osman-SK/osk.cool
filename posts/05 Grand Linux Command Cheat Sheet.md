@@ -4,6 +4,7 @@ date: 2026-07-08
 tags:
   - "#Linux"
 ---
+## Quick Reference & Practical Examples (All Topics)
 
 ```bash
 
@@ -75,6 +76,10 @@ echo $SHELL          # default shell
 uptime
 
 date
+cal
+cal 2026
+cal -3
+
 timedatectl
 timedatectl -a       # show all properties
 timedatectl -h
@@ -707,6 +712,8 @@ vim <new-file-name>
 vim .
 vim path/to/location
 
+vim -M <file>    # strict read-only mode; no buffer or file edit allowed
+
 vimtutor
 
 <cmd> | vim -    # read in vim
@@ -715,6 +722,9 @@ vimtutor
 
 :%s/old_word/new_word/gc # c: asks for confirnation
 
+:set paste
+
+:nohlsearch
 
 ### ============================================
 ### TMUX
@@ -723,6 +733,7 @@ vimtutor
 tmux
 tmux ls
 tmux attach | a [-t] # -t for target
+tmux kill-session -t <session_name_or_number> 
 
 exit   # detach and close tmux session
 
@@ -894,7 +905,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 
 ```
 
-Version 5
+Version 6
 
 ---
 

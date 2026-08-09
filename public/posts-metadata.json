@@ -1,5 +1,12 @@
 [
   {
+    "slug": "10-web3-hardware-wallet-hack---a-postmortem-and-improved-best-practices",
+    "title": "Web3 Hardware Wallet Hack: A Postmortem and Improved Best Practices",
+    "date": "2026-08-09",
+    "author": "Osman Sarper Kucuk",
+    "excerpt": "Intro\n\nWeb3/onchain users and institutions are used to software or social engineering hacks. A hardware wallet hack is new. Hardware wallets were supp..."
+  },
+  {
     "slug": "09-my-hosting-setup-on-google-cloud-platform",
     "title": "My Blog Setup on Google Cloud Platform",
     "date": "2026-08-03",
@@ -32,7 +39,7 @@
     "title": "Grand Linux Command Cheat Sheet",
     "date": "2026-07-08",
     "author": "Osman Sarper Kucuk",
-    "excerpt": "bash\n\n ============================================\n USEFUL IN WIDE RANGE\n ============================================\n\n<cmd> -h\n<cmd> --help\n<cmd> <..."
+    "excerpt": "Quick Reference & Practical Examples (All Topics)\n\nbash\n\n ============================================\n USEFUL IN WIDE RANGE\n ========================..."
   },
   {
     "slug": "04-network-file-share-setup",
