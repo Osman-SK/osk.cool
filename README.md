@@ -54,6 +54,8 @@ npm run build
 
 # Preview production build locally
 npm run preview
+
+# Browser Shortcut after exposing on localhost: o + Enter
 ```
 
 ## Deployment (Google Cloud App Engine)

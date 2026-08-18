@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New HomeLab Apps: Dashboard, WebTop, Qbittorrent and Prowlarr via Cloudflare Tunnel and ghcr.io - Osman Sarper Kucuk</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .post-content h2,
+    .post-content h3,
+    .post-content h4,
+    .post-content h5,
+    .post-content h6 {
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .post-content h2 { font-size: 1.5rem; }
+    .post-content h3 { font-size: 1.3rem; }
+    .post-content p { margin-bottom: 1.75rem; }
+    .post-content ul,
+    .post-content ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .post-content li {
+      margin-bottom: 0.5rem;
+    }
+    .post-content blockquote {
+      border-left: 3px solid #444;
+      padding-left: 1rem;
+      margin-bottom: 1.75rem;
+      color: #aaa;
+    }
+    .post-content pre {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin-bottom: 1.75rem;
+    }
+    .post-content code {
+      background: #1a1a1a;
+      padding: 0.15rem 0.3rem;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .post-content pre code {
+      padding: 0;
+      background: none;
+    }
+    .post-content hr {
+      margin: 2.5rem 0;
+      border: 0;
+      height: 1px;
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="/">Osman Sarper Kucuk</a></h1>
+    <nav>
+      <a href="/posts">Posts</a> ·
+      <a href="/links">Links</a>
+    </nav>
+  </header>
+
+  <hr />
+
+  <main>
+    <article class="post">
+      <h3>New HomeLab Apps: Dashboard, WebTop, Qbittorrent and Prowlarr via Cloudflare Tunnel and ghcr.io</h3>
+      <p class="post-meta">
+        <span class="date">August 17, 2026</span>
+      </p>
+      <hr />
+      <div class="post-content">
+        <h3>1- Dashboard</h3>
+<p>I have been exploring new apps for my home K8s cluster.</p>
+<p>I wanted to start with a place where I saw a bird&#39;s eye view of my cluster stats. I fell in love with one open source dashboard: <a href="https://status.deleontech.net/">status.deleontech.net</a> made by <a href="https://www.linkedin.com/in/jonathan-deleon-cism/">Jonathan Deleon</a>. A former KubeCraft member.</p>
+<p>Thanks to Jonathan mine is forked and live on: <a href="https://status.oskcloud.net/">status.oskcloud.net</a></p>
+<p>The process involved setting a cloudflare tunnel and uploading a container to GitHub Container Registry (ghcr) which were welcome since it has been a while I did those. </p>
+<p>Notes helped, workflow looked like:</p>
+<pre><code class="language-bash">
+# =================== cloudflared Tunnel Creation Steps =========================
+
+# from node/server (not on remote/client machine) create tunnel:
+
+cloudflared tunnel create audiobooks # audiobooks.oskcloud.net, not mandatory but good convention to keep!
+
+cd
+cd .cloudflared
+
+ls -l
+
+# on remote machine/client, get the tunnel json:
+
+scp &lt;user&gt;@XX.XX.XX.XX:/home/&lt;user&gt;/.cloudflared/c0fc020d-2a61-495a-9028-25f7ad838b98.json  ~/Documents/pi-cluster/
+
+# create k8s secret:
+
+kubectl create secret generic tunnel-credentials \
+--from-file=credentials.json=c0fc020d-2a61-495a-9028-25f7ad838b98.json \
+--dry-run=client -o yaml &gt; cloudflare-secret.yaml
+
+# encrypt w/ sops:
+
+sops --age=$AGE_PUBLIC \
+--encrypt --encrypted-regex &#39;^(data|stringData){{CONTENT}}#39; --in-place cloudflare-secret.yaml
+
+# Add to the Cloudflare DNS:
+
+&gt;&gt; go to Cloudflare DNS records for oskcloud.net
+&gt;&gt; configure:
+&gt;&gt; TYPE: CNAME
+&gt;&gt; NAME: audiobooks   # audiobooks.oskcloud.net
+&gt;&gt; TARGET: c0fc020d-2a61-495a-9028-25f7ad838b98.cfargotunnel.com
+
+nslookup audiobooks.oskcloud.net   # check if it is up! a minute or so!
+
+# ================= END CoudFlareD Tunnel Creation Steps =======================
+
+
+
+# ==================== GHCR Upload ====================
+
+# Login to GHCR (you need a Personal Access Token with write:packages scope)
+echo YOUR_GITHUB_PAT | docker login ghcr.io -u Osman-SK --password-stdin
+
+cd dashboard 
+docker build -t ghcr.io/osman-sk/cluster-dashboard:v1.0.0 .
+
+docker push ghcr.io/osman-sk/cluster-dashboard:v1.0.0
+
+# ==================== END GHCR Upload ====================
+</code></pre>
+<h3>2- WebTop: VM for the Cluster</h3>
+<p>I have been looking for a decent torrent set up for a while. Lots of free and legal media available for consumption.</p>
+<p>I thought why not a container-VM with proper security (torrent sites are notorious for malware)? Enter: WebTop. A VM via browser!</p>
+<p>I can now search and download within the WebTop container and then use persistent volumes associated with them to move files around, especially to where my NFS is served. Or so I thought.</p>
+<p>The very first issue was that: raspberry pi and wayland did not go well together. Had to use X11. Unfortunately X11 did not work either. </p>
+<p>I then decided to use alpine image for ubuntu xfce and that did work! Now I could browse. </p>
+<p>Second issue: even though I could browse the net, I had strict restrictions on the container like privilege escalation. Because the container could not use root, I could not really download and use binaries (if it possible pls let me know!).</p>
+<p>So then I had a research-chat with Grok. I decided to use WebTop as just a regular VM to do regular VM things, and wanted implement qbittorrent (torrent client) and prowlarr (indexer/search) together for torrenting.</p>
+<h3>3- Qbittorrent and Prowlarr</h3>
+<p>After adjusting manifests, an unexpected thing happened. I mistook lack of seeders for slow download speeds while running in Cluster-IP (not exposed to the net as much as a port-forwarded set up, reducing connections and speed).</p>
+<p>Turns out it had nothing to do with Cluster-IP set up, just plain lack of seeder count/volume. LOL. I forgot a bit about how this stuff worked!</p>
+<p>After figuring out it was the seeder, not port-forward problem: I love this set up! </p>
+<p>Prowlarr searches for torrents and automatically sends them to the torrent client (qbit) on cluster. You do not need to open the webUI of qbit client if you do not want to, Prowlarr just handles it with a few configs! (same namespace and prowlarr setting configs make it possible!)</p>
+<h3>4- Outlook</h3>
+<p>I have so many things in the pipeline that I want to try. Slowly move media and streaming to k8s, add nodes and make it multi node + mixed architecture (amd64 &amp; ARM64), try web3 accounts for authentication, login even maybe for secrets. Will be fun!</p>
+<h3>References</h3>
+<p>My homelab is open source, read more in the README: <a href="https://github.com/Osman-SK/pi-cluster">github.com/Osman-SK/pi-cluster</a></p>
+
+      </div>
+    </article>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

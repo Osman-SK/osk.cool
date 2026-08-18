@@ -1,5 +1,12 @@
 [
   {
+    "slug": "11-new-homelab-apps",
+    "title": "New HomeLab Apps: Dashboard, WebTop, Qbittorrent and Prowlarr via Cloudflare Tunnel and ghcr.io",
+    "date": "2026-08-17",
+    "author": "Osman Sarper Kucuk",
+    "excerpt": "1- Dashboard\n\nI have been exploring new apps for my home K8s cluster.\n\nI wanted to start with a place where I saw a bird's eye view of my cluster stat..."
+  },
+  {
     "slug": "10-web3-hardware-wallet-hack---a-postmortem-and-improved-best-practices",
     "title": "Web3 Hardware Wallet Hack: A Postmortem and Improved Best Practices",
     "date": "2026-08-09",
