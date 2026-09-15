@@ -1,9 +1,10 @@
 ---
-title: "New HomeLab Apps: Dashboard, WebTop, Qbittorrent and Prowlarr via Cloudflare Tunnel and ghcr.io"
+title: "K8s Cluster Apps I Setup"
 date: 2026-08-17
 tags:
   - "#K8s-Cluster"
   - "#HomeLab"
+  - "#Cloudflare-Tunnel"
 ---
 ### 1- Dashboard
 

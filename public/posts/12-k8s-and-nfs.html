@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>K8s storage solutions: NFS and Longhorn - Osman Sarper Kucuk</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .post-content h2,
+    .post-content h3,
+    .post-content h4,
+    .post-content h5,
+    .post-content h6 {
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .post-content h2 { font-size: 1.5rem; }
+    .post-content h3 { font-size: 1.3rem; }
+    .post-content p { margin-bottom: 1.75rem; }
+    .post-content ul,
+    .post-content ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .post-content li {
+      margin-bottom: 0.5rem;
+    }
+    .post-content blockquote {
+      border-left: 3px solid #444;
+      padding-left: 1rem;
+      margin-bottom: 1.75rem;
+      color: #aaa;
+    }
+    .post-content pre {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin-bottom: 1.75rem;
+    }
+    .post-content code {
+      background: #1a1a1a;
+      padding: 0.15rem 0.3rem;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .post-content pre code {
+      padding: 0;
+      background: none;
+    }
+    .post-content hr {
+      margin: 2.5rem 0;
+      border: 0;
+      height: 1px;
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="/">Osman Sarper Kucuk</a></h1>
+    <nav>
+      <a href="/posts">Posts</a> ·
+      <a href="/links">Links</a>
+    </nav>
+  </header>
+
+  <hr />
+
+  <main>
+    <article class="post">
+      <h3>K8s storage solutions: NFS and Longhorn</h3>
+      <p class="post-meta">
+        <span class="date">August 25, 2026</span>
+      </p>
+      <hr />
+      <div class="post-content">
+        <h3>K8s Storage Solutions</h3>
+<p>From my latest foray into K8s storage and availability; my limited search showed that <a href="https://longhorn.io/">Longhorn</a> is the most popular choice when it came to distributed block storage. It allows cluster storage to be replicated among nodes. Thus if node(s) go down, volume/storage attached to downed nodes do not become a problem and available via other nodes. Genius.</p>
+<p>However I have different needs. I do not have enough storage in my master node, and not nearly enough on agent/worker node. What I do have is my attached/extra storage on my worker node that I make use of as DAS (direct attached storage) and configuerd for NFS (network file share).</p>
+<p>Therefore K8s solutions involving NFS were prime canditates. Found my darling in this K8s <a href="https://github.com/kubernetes-csi/csi-driver-nfs">csi driver</a>. This driver simply allows a cluster to use pre-configured NFSv3 or v4 setup which is I already have and documented in this <a href="https://osk.cool/posts/04-network-file-share-setup.html">nfs setup blog post</a>. </p>
+<h3>Yamls</h3>
+<p>Associated config/yaml files are here for my cluster: <a href="https://github.com/Osman-SK/home-cluster/tree/master/infra/controllers/base/nfs-csi">https://github.com/Osman-SK/home-cluster/tree/master/infra/controllers/base/nfs-csi</a></p>
+<p>To give an overview, I make use of helm charts for the nfs driver.</p>
+<p>I manage the whole thing through Flux (GitOps all the way). There’s a HelmRepository pointing at the official charts, and a HelmRelease that installs csi-driver-nfs version 4.11.0 into its own nfs-csi namespace.</p>
+<p>A few key values I set:</p>
+<ul>
+<li>Controller runs on the control-plane node (runOnControlPlane: true) with a single replica; enough for a home cluster.</li>
+<li>driver.mountPermissions: &quot;0755&quot; so the provisioned directories don’t end up with overly restrictive permissions.</li>
+<li>I explicitly disable the chart’s built-in StorageClass creation (storageClass.create: false) because I want to manage (and SOPS-encrypt) that myself.</li>
+</ul>
+<p>The StorageClass itself is pretty straightforward. It points the provisioner nfs.csi.k8s.io at the NFS server and share I already set up earlier. A couple of mount options keep it on NFSv4, and I enable volume expansion + set a reclaim policy that matches how I like to clean things up. </p>
+<p>Because the driver supports dynamic provisioning, every new PVC just gets a subdirectory created under the existing share; no manual directory babysitting required.</p>
+<p>Once the HelmRelease is reconciled and the StorageClass is applied, any workload can simply request:</p>
+<pre><code>apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: whatever
+spec:
+  accessModes:
+    - ReadWriteMany          # or ReadWriteOnce, both work
+  storageClassName: nfs-csi  # or whatever you named the class
+  resources:
+    requests:
+      storage: 10Gi
+</code></pre>
+<p>…and the CSI driver takes care of the rest.</p>
+<h3>Why this instead of Longhorn (for me)</h3>
+<p>Longhorn is excellent when you actually have usable local disks on every node and want true distributed block storage with replication. I don’t. My master is storage-starved and the worker’s interesting capacity lives on a DAS that is already exported via NFS. Re-using that existing NFS export via the official CSI driver is simpler, lighter, and doesn’t force me to dedicate more local disk or run extra replica engines I don’t need.</p>
+<p>Trade-offs are: the NFS server (and the disk behind it) is a single point of failure, and you get file-level rather than block-level semantics. For a home lab that already treats that DAS as the “big storage” anyway, that’s an acceptable (and intentional) trade-off. </p>
+<p>I will be diving more into having a copy of my whole disk in another location later on. I am ok right now.</p>
+<p>That’s the whole setup. Clean, minimal, and it just works with the NFS share I already had.</p>
+
+      </div>
+    </article>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What’s actually under 'status.oskcloud.net' - Osman Sarper Kucuk</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .post-content h2,
+    .post-content h3,
+    .post-content h4,
+    .post-content h5,
+    .post-content h6 {
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .post-content h2 { font-size: 1.5rem; }
+    .post-content h3 { font-size: 1.3rem; }
+    .post-content p { margin-bottom: 1.75rem; }
+    .post-content ul,
+    .post-content ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .post-content li {
+      margin-bottom: 0.5rem;
+    }
+    .post-content blockquote {
+      border-left: 3px solid #444;
+      padding-left: 1rem;
+      margin-bottom: 1.75rem;
+      color: #aaa;
+    }
+    .post-content pre {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin-bottom: 1.75rem;
+    }
+    .post-content code {
+      background: #1a1a1a;
+      padding: 0.15rem 0.3rem;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .post-content pre code {
+      padding: 0;
+      background: none;
+    }
+    .post-content hr {
+      margin: 2.5rem 0;
+      border: 0;
+      height: 1px;
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="/">Osman Sarper Kucuk</a></h1>
+    <nav>
+      <a href="/posts">Posts</a> ·
+      <a href="/links">Links</a>
+    </nav>
+  </header>
+
+  <hr />
+
+  <main>
+    <article class="post">
+      <h3>What’s actually under 'status.oskcloud.net'</h3>
+      <p class="post-meta">
+        <span class="date">September 14, 2026</span>
+      </p>
+      <hr />
+      <div class="post-content">
+        <h2>Intro</h2>
+<p>Recently <a href="https://www.linkedin.com/in/mischavandenburg/">Mischa van den Burg</a> asked me about the dashboard in my home Kubernetes cluster. I mumbled too much and could not explain what was going on under the hood, so I went back and looked properly.</p>
+<p>The manifests and image started from <a href="https://www.linkedin.com/in/jonathan-deleon-cism/">Jonathan De Leon</a>’s work. They ran flawlessly, so I had never looked past “it shows CPU and pods on a URL.”</p>
+<h2>What it is</h2>
+<p><code>cluster-dashboard</code> is a small status page for the homelab. It shows things like:</p>
+<ul>
+<li>node names, roles, and architecture</li>
+<li>pod counts</li>
+<li>service / deployment health</li>
+<li>overall CPU and RAM</li>
+</ul>
+<p>It is public at <a href="https://status.oskcloud.net/">https://status.oskcloud.net/</a>.</p>
+<p>It is <strong>not</strong> Grafana, <strong>not</strong> the official Kubernetes Dashboard, and <strong>not</strong> metrics-server. Those exist elsewhere in the cluster. This page is a static site plus a JSON file that gets rewritten every 30 seconds.</p>
+<h2>How it gets onto the cluster</h2>
+<p>When the cluster is up, Flux reconciles Git and applies the dashboard manifests (<code>apps/base/cluster-dashboard</code> plus the staging overlay).</p>
+<p>That creates a Deployment in namespace <code>cluster-dashboard</code>. One Pod, <strong>two containers</strong>:</p>
+<ol>
+<li><strong>nginx</strong> — serves the website  </li>
+<li><strong>metrics-collector</strong> — a sidecar that writes metrics into a file nginx can serve</li>
+</ol>
+<p>They share a volume. That pairing is the whole design.</p>
+<h2>The main container: nginx</h2>
+<p>A web server listens for HTTP, maps a URL to a file or response, and writes that response back. Here the main container is unprivileged nginx on port <strong>8080</strong>.</p>
+<p>The image is built from only two files:</p>
+<ul>
+<li><code>Dockerfile</code> — <code>nginxinc/nginx-unprivileged</code> plus a copy of the page  </li>
+<li><code>index.html</code> — HTML, CSS, and JavaScript</li>
+</ul>
+<p>Source: <a href="https://github.com/Osman-SK/home-cluster/tree/master/dashboard">github.com/Osman-SK/home-cluster/tree/master/dashboard</a></p>
+<p>The running image in the cluster is <code>ghcr.io/osman-sk/cluster-dashboard</code>. </p>
+<p>nginx itself does <strong>not</strong> scrape Kubernetes. It only serves:</p>
+<ul>
+<li><code>GET /</code> → <code>index.html</code> baked into the image  </li>
+<li><code>GET /api/metrics.json</code> → a file that appears at runtime on a mounted directory</li>
+</ul>
+<h2>The sidecar: metrics-collector</h2>
+<p>The sidecar pattern is a helper container in the same Pod as the main app. Same host, same network namespace, same lifetime, separate process. The helper adds behavior without stuffing it into the nginx image.</p>
+<p>This sidecar is Alpine. On start it runs a shell script from a ConfigMap (<code>collect.sh</code>). Its only job:</p>
+<ol>
+<li>Query Prometheus  </li>
+<li>Shape the result into one JSON document  </li>
+<li>Write that file onto a volume nginx can read</li>
+</ol>
+<p>nginx never gets cluster credentials. The browser never talks to Prometheus.</p>
+<h2>Where the numbers come from</h2>
+<p>Every 30 seconds the script hits the in-cluster Prometheus HTTP API:</p>
+<pre><code class="language-text">http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090/api/v1/query
+</code></pre>
+<p>That Prometheus is <code>kube-prometheus-stack</code>, also installed by Flux under <code>monitoring/</code>.</p>
+<p>The script does <strong>not</strong> call <code>kubectl</code> and does <strong>not</strong> use metrics-server. It runs PromQL. The series it needs were already scraped from:</p>
+<ul>
+<li><strong>node-exporter</strong> — host CPU, memory, uname, boot time (<code>node_*</code>)  </li>
+<li><strong>kube-state-metrics</strong> — object state from the API server (<code>kube_pod_info</code>, <code>kube_deployment_*</code>)</li>
+</ul>
+<p>So: does the dashboard query Kubernetes directly? No. It queries Prometheus. Prometheus already asked the exporters.</p>
+<p><code>jq</code> on the sidecar joins the query results into one object, for example node CPU/memory, pod counts, deployment available vs desired. It writes atomically (<code>metrics.json.tmp</code> then rename) so nginx does not serve a half-written file.</p>
+<h2>The shared volume</h2>
+<p>Both containers mount an <code>emptyDir</code> named <code>metrics-data</code>:</p>
+<ul>
+<li>sidecar: <code>/data/metrics.json</code> (write)  </li>
+<li>nginx: <code>/usr/share/nginx/html/api/metrics.json</code> (read)</li>
+</ul>
+<p><code>emptyDir</code> is scratch space that lives as long as the Pod. Empty at start, gone when the Pod is deleted. Here it is the contract between helper and web server: <strong>file drop, not an API</strong>.</p>
+<p>Until the first successful loop, <code>/api/metrics.json</code> is missing. The page shows <code>CONNECTING...</code> and retries.</p>
+<h2>How the browser uses it</h2>
+<ol>
+<li>Browser loads <code>https://status.oskcloud.net/</code> --&gt; HTML/CSS/JS from nginx.  </li>
+<li>JavaScript calls <code>fetch(&#39;/api/metrics.json?t=&#39; + Date.now())</code> immediately, then every 30 seconds. The query string avoids a cached file.  </li>
+<li>The script paints nodes, bars, pod counts, and service health. Some labels (which node is the Pi, which is storage) are hardcoded in the HTML; the live numbers come from JSON.</li>
+</ol>
+<p>Same origin: the JSON is just another path on the same host.</p>
+<h2>How the request reaches nginx</h2>
+<p>Nothing listens on the home router. A Cloudflare Tunnel connector runs <strong>in the cluster</strong> as its own Deployment (<code>cloudflare/cloudflared</code>).</p>
+<p>That is not the same thing as the <code>cloudflared</code> command/binary you run once (<code>cloudflared tunnel create …</code>). The binary command <strong>creates</strong> the tunnel and credentials. The Pod <strong>runs</strong> the tunnel with those credentials. After setup, the laptop binary does not need to keep running.</p>
+<p>Path of a visitor:</p>
+<pre><code class="language-text">Browser
+  → Cloudflare edge (TLS)          # their anycast proxy
+  → cloudflared Pod                # in-cluster connector
+  → Service cluster-dashboard:3000
+  → nginx :8080
+        GET /                 → index.html (from the image)
+        GET /api/metrics.json → file from emptyDir
+</code></pre>
+<p><code>cluster-dashboard:3000</code> is a ClusterIP Service. Clients dial <strong>3000</strong>; kube-proxy forwards to the Pod’s <strong>8080</strong>, which is where nginx listens. From <code>cloudflared</code> to nginx the hop is plain HTTP on the cluster network. TLS already ended at Cloudflare.</p>
+<p>Tiny version of the same idea:</p>
+<pre><code class="language-text">Web user              Cloudflare POP               Home cluster
+browser --TLS--&gt; status.oskcloud.net
+                       |
+                       |  already-open tunnel
+                       v
+                 cloudflared Pod --HTTP--&gt; Service :3000 --DNAT--&gt; nginx :8080
+</code></pre>
+<h2>How the data moves (the other direction)</h2>
+<pre><code class="language-text">Nodes / kubelet
+    │
+    ├─ node-exporter  ─────────────┐
+    └─ kube-state-metrics ─────────┤
+                                   ▼
+                         Prometheus (monitoring ns)
+                                   │  PromQL every 30s
+                                   ▼
+                    metrics-collector sidecar (Alpine)
+                                   │  write /data/metrics.json
+                                   ▼
+                    emptyDir shared with nginx
+                                   │
+                                   ▼
+                    nginx serves /api/metrics.json
+                                   │
+                    Cloudflare Tunnel → status.oskcloud.net
+                                   │
+                                   ▼
+                    Browser JS polls every 30s and paints the UI
+</code></pre>
+<p>Two pipelines, easy to mix up when talking out loud:</p>
+<ul>
+<li><strong>Data:</strong> exporters → Prometheus → sidecar → file → nginx → JS  </li>
+<li><strong>Users:</strong> browser → Cloudflare → <code>cloudflared</code> Pod → Service → nginx</li>
+</ul>
+<p>They only meet at nginx.</p>
+<h2>What I should have said to Mischa</h2>
+<p>Underneath the dashboard is a static page in nginx, a sidecar that snapshots Prometheus into <code>metrics.json</code> every 30 seconds, and a Cloudflare Tunnel so the Service never needs a public port.</p>
+<p>That is it 😅😁😆.</p>
+<p>That is why “the dashboard queries metrics server pod” was the wrong sentence. The dashboard queries a file. The sidecar queries Prometheus. Prometheus already scraped the cluster.</p>
+<p>Stayed tuned for &quot;What I should have said to Mischa Part 2: HomeLab Cluster Security&quot; 😂</p>
+<h3>Reference</h3>
+<p>Grok and Brave AI used for some definitions, clarifying information and data/visitor graphs.</p>
+
+      </div>
+    </article>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

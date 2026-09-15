@@ -1,7 +1,21 @@
 [
   {
-    "slug": "11-new-homelab-apps",
-    "title": "New HomeLab Apps: Dashboard, WebTop, Qbittorrent and Prowlarr via Cloudflare Tunnel and ghcr.io",
+    "slug": "13-whats-actually-under-statusoskcloudnet",
+    "title": "What’s actually under 'status.oskcloud.net'",
+    "date": "2026-09-14",
+    "author": "Osman Sarper Kucuk",
+    "excerpt": "Intro\n\nRecently [Mischa van den Burg](https://www.linkedin.com/in/mischavandenburg/) asked me about the dashboard in my home Kubernetes cluster. I mum..."
+  },
+  {
+    "slug": "12-k8s-and-nfs",
+    "title": "K8s storage solutions: NFS and Longhorn",
+    "date": "2026-08-25",
+    "author": "Osman Sarper Kucuk",
+    "excerpt": "K8s Storage Solutions\n\nFrom my latest foray into K8s storage and availability; my limited search showed that [Longhorn](https://longhorn.io/) is the m..."
+  },
+  {
+    "slug": "11-k8s-cluster-apps-i-setup",
+    "title": "K8s Cluster Apps I Setup",
     "date": "2026-08-17",
     "author": "Osman Sarper Kucuk",
     "excerpt": "1- Dashboard\n\nI have been exploring new apps for my home K8s cluster.\n\nI wanted to start with a place where I saw a bird's eye view of my cluster stat..."
