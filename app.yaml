@@ -1,6 +1,10 @@
 runtime: nodejs22
 env: standard
 
+automatic_scaling:
+  min_instances: 0
+  max_instances: 30
+
 handlers:
 
   # Root URL (/)
@@ -8,7 +12,7 @@ handlers:
     static_files: dist/index.html
     upload: dist/index.html
     secure: always
-  
+
   # Posts listing page
   - url: /posts
     static_files: dist/posts.html
@@ -39,12 +43,19 @@ handlers:
     upload: dist/assets/.*
     secure: always
 
-  # Individual post pages
+  # individual post pages
   - url: /posts/(.*\.html)
     static_files: dist/posts/\1
     upload: dist/posts/.*
     secure: always
-  
+
+  # /posts/01, /posts/01-anything, /posts/01 Post Number 1
+  # all serve dist/posts/01.html
+  - url: /posts/(\d+).*
+    static_files: dist/posts/\1.html
+    upload: dist/posts/\d+\.html
+    secure: always
+
   # Catch all 1 for clean URLs with .html extension
   - url: /(.*)\.html$
     static_files: dist/\1.html

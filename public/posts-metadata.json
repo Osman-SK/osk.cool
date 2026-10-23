@@ -1,5 +1,12 @@
 [
   {
+    "slug": "14-kubernetes-command-cheat-sheet",
+    "title": "Kubernetes Command Cheat Sheet",
+    "date": "2026-10-13",
+    "author": "Osman Sarper Kucuk",
+    "excerpt": "Quick Reference & Practical Examples\n\nbash\n\n kubectl intro\n\nalias k=kubectl\n\nbrew install bash-completion@2  completion needs Bash 4.1+ and bash-compl..."
+  },
+  {
     "slug": "13-whats-actually-under-statusoskcloudnet",
     "title": "What’s actually under 'status.oskcloud.net'",
     "date": "2026-09-14",

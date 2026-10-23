@@ -73,10 +73,13 @@ After logged in and project set:
 
 
 ```bash
-# clear dist/ folder
+
+# 1- copy post to posts/ folder
+
+# 2- clear dist/ folder
 rm -rf ./dist
 
-# build and deploy:
+# 3- build and deploy:
 npm run build
 gcloud app deploy
 ```

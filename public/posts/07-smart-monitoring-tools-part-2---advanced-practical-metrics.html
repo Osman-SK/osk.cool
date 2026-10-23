@@ -111,48 +111,49 @@ SATA Version is:  SATA 3.1, 6.0 Gb/s (current: 6.0 Gb/s)
 <p>This is the crux of health assessment.</p>
 <p>At first glance there are lots of columns (example table shows less for legibility), we shall focus on the most important columns:</p>
 <ul>
-<li>TYPE</li>
+<li>ATTRIBUTE_NAME</li>
 <li>RAW_VALUE</li>
 </ul>
 <pre><code>
 Vendor Specific SMART Attributes with Thresholds:
 
-ID# ATTRIBUTE_NAME            TYPE      UPDATED  WHEN_FAILED RAW_VALUE
+ID# ATTRIBUTE_NAME         WHEN_FAILED RAW_VALUE
 
-  5 Reallocated_Sector_Ct     Pre-fail  Always       -       0
+  5 Reallocated_Sector_Ct         -       0
 
-  9 Power_On_Hours            Old_age   Always       -       27734
+  9 Power_On_Hours                -       27734
 
- 12 Power_Cycle_Count         Old_age   Always       -       730
+ 12 Power_Cycle_Count             -       730
 
-187 Reported_Uncorrect        Old_age   Always       -       0
+187 Reported_Uncorrect            -       0
 
-188 Command_Timeout           Old_age   Always       -       19557 19564 65535
+188 Command_Timeout               -       19557 19564 65535
 
-190 Airflow_Temperature_Cel   Old_age   Always   In_the_past 43 (Min/Max 36/45 #9049)
+190 Airflow_Temperature_Cel   In_the_past 43 (Min/Max 36/45 #9049)
 
-194 Temperature_Celsius       Old_age   Always       -       43 (0 9 0 0 0)
+194 Temperature_Celsius           -       43 (0 9 0 0 0)
 
-197 Current_Pending_Sector    Old_age   Always       -       0
+197 Current_Pending_Sector        -       0
 
-198 Offline_Uncorrectable     Old_age   Offline      -       0
+198 Offline_Uncorrectable         -       0
 
-199 UDMA_CRC_Error_Count      Old_age   Always       -       15637058
+199 UDMA_CRC_Error_Count          -       15637058
 
-241 Total_LBAs_Written        Old_age   Offline      -       199823481677
+241 Total_LBAs_Written            -       199823481677
 </code></pre>
-<p>TYPE column gives a quick &quot;urgency&quot; for the metric in question:</p>
-<p>Pre-fail
-Old_age
-etc.</p>
-<p>RAW_VALUE gives the specific data for the metric.</p>
-<p>And lastly the metrics: </p>
+<p>ATTRIBUTE_NAME is self explanatory, my favourites: </p>
 <ul>
+<li>#5 Reallocated_Sector_Ct</li>
 <li>#9 Power_On_Hours </li>
 <li>#241 Total_LBAs_Written</li>
 </ul>
 <p> </p>
+<p>RAW_VALUE gives the specific data for the metric.</p>
 <p>Please note that these metrics are not the whole story but still gives a quick idea.</p>
+<h3>#5 Reallocated_Sector_Ct</h3>
+<p>This one tracks the number of bad sectors a hard drive has found and permanently replaced with spare sectors from a reserve pool. </p>
+<p>Bad sectors are damaged or unreadable clusters on a hard drive that prevent data access.</p>
+<p> A value of zero is normal / wanted, and any count above zero is bad news; indicates the drive is degrading. If it is degrading; how fast is another point.</p>
 <h3>#9 Power On Hours</h3>
 <p>This one simply shows how many hours the drive was up. Judge by yourself per table below:</p>
 <table>
@@ -209,6 +210,7 @@ etc.</p>
 <td><br>~2,750 TB<br></td>
 </tr>
 </tbody></table>
+<p>Note that some brands like Seagate obfuscate this number; smart data does accurately show, special S.M.A.R.T.-like seagate tools show real number (Seagate SeaTools).</p>
 <h3>Other Attributes</h3>
 <ul>
 <li><p>12 Power_Cycle_Count: How many times the drive was powered on/off.</p>
@@ -277,6 +279,8 @@ etc.</p>
 <li><p>smartmontools GitHub Repository (Official source code) <a href="https://github.com/smartmontools/smartmontools/">https://github.com/smartmontools/smartmontools/</a></p>
 </li>
 </ul>
+<hr>
+<p>1st revision on 2026-10-23</p>
 
       </div>
     </article>
